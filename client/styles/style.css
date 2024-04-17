@@ -11,6 +11,9 @@ h1{
 
 body{
     background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("../images/backgrounds/amphi2026.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100vw auto;
 }
 
 main{
@@ -27,7 +30,7 @@ main{
     border-radius: 10px;
     display: flex;
     justify-content: center;
-    padding: 2vh 20px;
+    padding: 5vh 10px;
     justify-content: center;
     flex-direction: column;
     text-align: center;
@@ -42,7 +45,7 @@ main{
 .form_login{
     width: 100%;
     border-radius: 3px;
-    margin: 15px 0;
+    margin: 15px;
 }
 
 input{
@@ -53,6 +56,7 @@ input{
 footer{
     background-color: rgba(0, 0, 0, 0.5);
     text-align: center;
+    font-size: small;
     color: #fff;
     width: 100%;
     position: absolute;
