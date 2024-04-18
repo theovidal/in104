@@ -2,6 +2,13 @@
 
 #include <stdint.h>
 
+typedef enum DBError {
+	DB_OK, // aucune erreure
+	DB_FILE_NOT_FOUND, // fichier non trouvé
+	DB_PARSE_ERROR, // la base de donnée n'est pas sous le bon format
+	DB_BAD_ALLOC, // allocation foireuse
+} DBError;
+
 typedef enum DBQueryContrainType {
 	DB_AND,
 	DB_OR,
@@ -13,24 +20,18 @@ typedef enum DBQueryContrainType {
 	DB_GTE
 } DBQueryContrainType;
 
-typedef enum DBTypes {
+typedef enum DBType {
 	DB_INTEGER,
 	DB_FLOAT,
 	DB_TEXT
-} DBTypes;
+} DBType;
 
-typedef enum DBQUeryResultType {
-	DB_TABLE_COPY,
-	DB_TABLE_INTERVAL,
-	DB_LAZY
-} DBQUeryResultType;
-
-typedef struct DBQueryConstrain {
+typedef struct DBCondition {
 	DBQueryContrainType type;
 	union {
 		struct { 
-			DBQueryConstrain *first;
-			DBQueryConstrain *second;
+			struct DBCondition *first;
+			struct DBCondition *second;
 		} binary;
 
 		struct {
@@ -42,34 +43,48 @@ typedef struct DBQueryConstrain {
 			} comp_data;
 		} op;
 	} data;
-} DBQueryConstrain;
+} DBCondition;
 
-typedef struct DBColumnLayout {
-	uint32_t data_count;
-	DBTypes *types;
-	const char **names;
-} DBColumnLayout;
+typedef struct DBLayoutNode {
+	struct DBLayoutNode *next;
+	char *name;
+	DBType type;
+} DBLayoutNode;
 
-typedef struct DBColumn {
-	const char *column_name;
-	DBColumnLayout layout;
-	void *column_data;
-	uint64_t column_data_size;
-} DBColumn;
+typedef struct DBLayout {
+	uint32_t total_size;
+	DBLayoutNode *root;
+} DBLayout;
+
+typedef struct DBTableRow {
+	char *data;
+	struct DBTableRow *next;
+} DBTableRow;
 
 typedef struct DBTable {
-	const char *table_name;
-	DBColumn *columns;
-	uint32_t column_count;
+	char *table_name;
+	DBLayout layout;
+	DBTableRow *root;
 } DBTable;
 
-typedef struct DBQueryResult {
-	DBQueryContrainType type;
-	// ...
-} DBQueryResult;
+void db_layout_create(DBLayout *layout);
 
-int db_table_load(const char *filepath, DBTable *table);
-void db_table_free(DBTable *table);
-int db_query(DBQueryConstrain *constrains, DBTable *table, DBTable *out_result);
-int db_insert(DBTable *table, void *raw_data, uint32_t data_size );
-int db_save(DBTable *table, const char *filepath);
+void db_layout_destroy(DBLayout *layout);
+
+DBError db_layout_push(DBLayout *layout, const char *column_name, DBType type);
+
+void db_layout_remove(DBLayout *layout, const char *column_name);
+
+void db_layout_print(DBLayout *layout);
+
+void db_table_create(DBTable *table, DBLayout *layout);
+
+void db_table_destroy(DBTable *table);
+
+DBError db_table_row_from_string(DBTableRow *row, const char *row_str);
+
+DBError db_table_add(DBTable *table, DBTableRow *row);
+
+DBError db_table_query(DBTable *table, DBCondition *condition, DBTable *out_table);
+
+void db_table_print_json(DBTable *table);

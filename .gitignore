@@ -2,4 +2,8 @@
 .vscode
 *.tmp
 
+.env
+
 node_modules
+
+build
