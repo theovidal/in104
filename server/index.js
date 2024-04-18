@@ -28,6 +28,13 @@ app.use(errorHandler);
 const registerRoutes = require('./core/registerRoutes');
 registerRoutes(app);
 
-app.listen(process.env.PORT, () => {
-  console.log(`✅ Listening on port ${process.env.PORT}`);
+const db = require("./config/db")
+
+// initializing ze base de données
+db.sync({force: true}).then(() => {
+  app.listen(process.env.PORT, () => {
+    console.log(`✅ Listening on port ${process.env.PORT}`);
+  })
+}).catch( () => {
+  console.error("🤡🤡🤡🤡")
 })
