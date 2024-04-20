@@ -1,3 +1,5 @@
+const db = require('../models')
+
 module.exports = function loginRoute(req, res) {
   if (res.locals.authenticated) {
     res.json(res.locals.user);
@@ -12,17 +14,23 @@ module.exports = function loginRoute(req, res) {
     if (result.found) {
       res.cookie('token', result.token, {signed: true}).json(result.user);
     } else {
-      res.status(403).send();
+      res.status(403).json({
+        error: 'invalid email and/or password'
+      });
     }
   }
 }
 
 function checkUser(email, password) {
-  return {
-    found: true,
-    token: 'abcabc',
-    user: {
-      name: 'John Doe'
-    }
-  };
+  if (email === 'john@example.com' && password === 'john')
+    return {
+      found: true,
+      token: 'abcabc',
+      user: {
+        name: 'John Doe'
+      }
+    };
+  else return {
+    found: false
+  }
 }

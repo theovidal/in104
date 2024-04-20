@@ -36,5 +36,5 @@ db.sync({force: true}).then(() => {
     console.log(`✅ Listening on port ${process.env.PORT}`);
   })
 }).catch( () => {
-  console.error("🤡🤡🤡🤡")
+  console.error("Error while creating the database")
 })
