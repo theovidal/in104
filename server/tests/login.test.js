@@ -11,8 +11,6 @@ test('login with the wrong email', async () => {
     },
     validateStatus: () => true // We want the request to fail
   });
-  console.log('---------------------- yeah -------------------')
-  console.log(response.data)
   expect(response.status).toBe(403)
   expect(response.data).toEqual({
     error: 'invalid email and/or password'

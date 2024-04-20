@@ -2,8 +2,13 @@
 .vscode
 *.tmp
 
+# Production
+build
 .env
+*.sqlite
 
+# Dependencies
 node_modules
 
-build
+# Tests
+coverage

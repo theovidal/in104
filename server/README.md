@@ -24,27 +24,7 @@ This folder contains the Back-End of our application, which consists of a REST A
   - Format : `path`.`method`.js, method = get or post
   - Every file is automatically imported by the app and integrated as an API route
 - `/middlewares` : functions executed before the main route function to add features (cookies, error handling, logging...)
-- `/tests` (TODO) : unit tests for API routes
-
-## Development
-
-Install all the required dependencies with your package manager :
-
-```bash
-npm i   # Using NPM
-yarn i  # Using Yarn
-pnpm i  # Using PNPM
-```
-
-Create a `.env` file at the root of the folder (so at the same level as `index.js`) and populate it with the values given in the [example .env](./.env.example).
-
-Run the server :
-
-```bash
-npm run serve  # Using NPM
-yarn serve     # Using Yarn
-pnpm serve     # Using PNPM
-```
+- `/tests` : unit tests for API routes
 
 ## Snippets
 
@@ -66,7 +46,8 @@ module.exports = function routeName(req, res) {
   res.status(204).send()
   
   // Send an error :
-  res.status(400)
-  throw new Error('error message')
+  res.status(400).json({
+    error: 'error message for the user'
+  })
 }
 ```

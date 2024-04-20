@@ -24,15 +24,33 @@ Install all the dependencies :
 
 ```bash
 npm install  # with NPM
-
 yarn install # with Yarn
-
 pnpm install # with PNPM
 ```
 
+Create a `.env` file at the root of the folder (so at the same level as `index.js`) and populate it with the values given in the [example .env](../.env.example).
+
 ## Run a development server
 
-TODO
+Run the server :
+
+```bash
+npm run dev  # Using NPM
+yarn dev     # Using Yarn
+pnpm dev     # Using PNPM
+```
+
+## Run the tests
+
+Tests are made using Jest for the API side.
+
+Run all the unit and coverage tests :
+
+```bash
+npm run test  # Using NPM
+yarn test     # Using Yarn
+pnpm test     # Using PNPM
+```
 
 ## Build & deploy for production
 

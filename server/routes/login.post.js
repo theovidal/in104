@@ -1,4 +1,4 @@
-const db = require('../models')
+const db = require('../../db/models')
 
 module.exports = function loginRoute(req, res, next) {
   if (res.locals.authenticated) {
