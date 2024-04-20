@@ -20,13 +20,14 @@ app.use(authMiddleware);
 const logger = require('./middlewares/logger');
 app.use(logger(process.env.LOGS));
 
-// Error handling middleware, to return formatted errors to the user
-const errorHandler = require('./middlewares/errors');
-app.use(errorHandler);
 
 // Helper to register every route located in the /routes directory
 const registerRoutes = require('./core/registerRoutes');
 registerRoutes(app);
+
+// Error handling middleware, to return formatted errors to the user
+const errorHandler = require('./middlewares/errors');
+app.use(errorHandler);
 
 const db = require("./config/db")
 

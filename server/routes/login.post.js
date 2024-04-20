@@ -1,6 +1,6 @@
 const db = require('../models')
 
-module.exports = function loginRoute(req, res) {
+module.exports = function loginRoute(req, res, next) {
   if (res.locals.authenticated) {
     res.json(res.locals.user);
   } else {
@@ -12,11 +12,11 @@ module.exports = function loginRoute(req, res) {
     const result = checkUser(email, password);
 
     if (result.found) {
-      res.cookie('token', result.token, {signed: true}).json(result.user);
+      res.status(201).cookie('token', result.token, {signed: true}).json(result.user);
     } else {
       res.status(403).json({
         error: 'invalid email and/or password'
-      });
+      })
     }
   }
 }

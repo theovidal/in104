@@ -1,53 +1,60 @@
-const request = require('request')
+const axios = require('axios');
+const utils = require('./utils');
 
-const baseUrl = 'http://localhost:8080'
-
-test('login with the wrong email', () => {
-  request.post({
-    url: `${baseUrl}/login`,
-    form: {
-      email: 'idkidk',
-      password: 'john'
-    }
-  }, (err, response, body) => {
-    expect(err).toBeNull()
-    expect(response.statusCode).toBe(403)
-    expect(JSON.parse(body)).toEqual({
-      error: 'invalid email and/or password'
-    })
+test('login with the wrong email', async () => {
+  const response = await axios.post(`${utils.baseUrl}/login`, {
+    email: 'idkidk',
+    password: 'john'
+  }, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    validateStatus: () => true // We want the request to fail
+  });
+  console.log('---------------------- yeah -------------------')
+  console.log(response.data)
+  expect(response.status).toBe(403)
+  expect(response.data).toEqual({
+    error: 'invalid email and/or password'
   })
 });
 
-test('login with the wrong password', () => {
-  request.post({
-    url: `${baseUrl}/login`,
-    form: {
-      email: 'john@example.com',
-      password: 'idkidk'
-    }
-  }, (err, response, body) => {
-    expect(err).toBeNull()
-    expect(response.statusCode).toBe(403)
-    expect(JSON.parse(body)).toEqual({
-      error: 'invalid email and/or password'
-    })
+test('login with the wrong password', async () => {
+  const response = await axios.post(`${utils.baseUrl}/login`, {
+    email: 'john@example.com',
+    password: 'idkidk'
+  }, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    validateStatus: () => true // We want the request to fail
+  });
+  expect(response.status).toBe(403)
+  expect(response.data).toEqual({
+    error: 'invalid email and/or password'
   })
 });
 
-test('login with the right credentials', () => {
-  request.post({
-    url: `${baseUrl}/login`,
-    form: {
-      email: 'john@example.com',
-      password: 'john'
+test('login with the right credentials, then logout', async () => {
+  const response = await axios.post(`${utils.baseUrl}/login`, {
+    email: 'john@example.com',
+    password: 'john'
+  }, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
-  }, (err, response, body) => {
-    expect(err).toBeNull()
-    expect(response.statusCode).toBe(200)
-    expect(response.headers['set-cookie'].length).toBeGreaterThan(0)
-    expect(response.headers['set-cookie'][0]).toMatch(/token=s%.*; Path=\//)
-    expect(JSON.parse(body)).toEqual({
-      name: 'John Doe'
-    })
+  });
+  expect(response.status).toBe(201)
+  expect(response.data).toEqual({
+    name: 'John Doe'
   })
+  expect(response.headers['set-cookie'].length).toBeGreaterThan(0)
+  expect(response.headers['set-cookie'][0]).toMatch(/token=s%.*; Path=\//)
+
+  const logoutResponse = await axios.post(`${utils.baseUrl}/logout`, {}, {
+    headers: {
+      Cookie: response.headers['set-cookie'][0]
+    }
+  });
+  expect(logoutResponse.status).toBe(204);
 });

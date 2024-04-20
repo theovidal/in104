@@ -1,5 +1,5 @@
 module.exports = function errorHandlingMiddleware(err, req, res, _) {
-  res.status(400).json({
+  res.json({
     error: err.message
   });
 }
