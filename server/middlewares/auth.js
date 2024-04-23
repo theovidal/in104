@@ -30,7 +30,8 @@ function checkToken(token) {
   return {
     found: true,
     user: {
-      name: 'John Doe'
+      name: 'John Doe',
+      role: 'professeur'
     }
   };
 }
