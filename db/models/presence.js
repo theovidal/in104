@@ -3,7 +3,7 @@ const {DataTypes} = require("sequelize");
 const Presence = (sequelize, Sequelize) => {
 	const Presence = sequelize.define("presence", {
 		isPresent: {
-			type: DataTypes.BOOL,
+			type: DataTypes.BOOLEAN,
 			allowNull: false
 		}
 	});

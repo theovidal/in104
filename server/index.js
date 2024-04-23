@@ -32,7 +32,7 @@ app.use(errorHandler);
 const db = require("../db")
 
 // initializing ze base de données
-db.sync({force: true}).then(() => {
+db.sync({alter: true}).then(() => {
   app.listen(process.env.PORT, () => {
     console.log(`✅ Listening on port ${process.env.PORT}`);
   })
