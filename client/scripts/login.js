@@ -17,7 +17,7 @@ async function loginFront() {
     // Vérification
     if (response.ok){
         const data = await response.json();
-        alert("ok");
+        // TODO : gérer la connexion
     }
     else{
         alert("Mauvais identifiant ou mot de passe");
