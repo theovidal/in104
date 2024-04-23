@@ -1,16 +1,19 @@
 module.exports = function authMiddleware(req, res, next) {
   res.locals.authenticated = false;
 
+  if (req.originalUrl.replace(/\?.*/g, '') === '/cas-callback') {
+    next();
+    return;
+  }
+
   const token = req.signedCookies.token;
 
   // Token can either be :
   // - undefined, if non existent
   // - false, if the signed token has been altered
   if (token === undefined || token === false) {
-    if (req.url !== '/login') {
-      res.status(401).clearCookie('token');
-      throw new Error('unauthenticated');
-    }
+    res.status(401).clearCookie('token');
+    throw new Error('unauthenticated');
   } else {
     const result = checkToken(token);
     if (result.found) {

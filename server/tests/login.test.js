@@ -7,7 +7,7 @@ test('login with the wrong email', async () => {
     password: 'john'
   }, {
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/json'
     },
     validateStatus: () => true // We want the request to fail
   });
@@ -23,7 +23,7 @@ test('login with the wrong password', async () => {
     password: 'idkidk'
   }, {
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/json'
     },
     validateStatus: () => true // We want the request to fail
   });
@@ -39,7 +39,7 @@ test('login with the right credentials, then logout', async () => {
     password: 'john'
   }, {
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
+      'Content-Type': 'application/json'
     }
   });
   expect(response.status).toBe(201)

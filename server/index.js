@@ -31,11 +31,26 @@ app.use(errorHandler);
 
 const db = require("../db")
 
+const https = require('https');
+const fs = require('fs')
+// Loading local certificates (for development purposes only, in order for CASCAD to be able to call back our API)
+let privateKey = fs.readFileSync( 'server/ssl/RootCA.key' );
+let certificate = fs.readFileSync( 'server/ssl/RootCA.pem' );
+
 // initializing ze base de données
 db.sync({force: true}).then(() => {
-  app.listen(process.env.PORT, () => {
-    console.log(`✅ Listening on port ${process.env.PORT}`);
-  })
+  if (process.env.NODE_ENV === 'development') {
+    https.createServer({
+      key: privateKey,
+      cert: certificate
+    }, app).listen(process.env.PORT, () => {
+      console.log(`💾 Development server listening on port ${process.env.PORT}`)
+    });
+  } else {
+    app.listen(process.env.PORT, () => {
+      console.log(`✅ Production server listening on port ${process.env.PORT}`);
+    })
+  }
 }).catch( () => {
   console.error("Error while creating the database")
 })
