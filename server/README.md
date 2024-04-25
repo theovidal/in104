@@ -6,16 +6,22 @@ This folder contains the Back-End of our application, which consists of a REST A
 
 ### User management
 
-- `POST` login : receives a form URL encoded body (application/x-www-form-urlencoded) with fields :
+- `POST` login : action of logging in using email and password ; include in the body :
   - email
   - password
-- `POST` logout
-- `GET` profile
+- `POST` logout : removes the session of the user
+- `GET` profile : get all the information of the user (assuming they're authenticated)
 
 ### Interaction with courses
 
-- `POST` create-code : for teacher
-- `POST` scan-code : for pupils
+- `POST` create-code : action for teachers to create a code for a certain course
+- `POST` scan-code : action for pupils to mark their presence at a certain lecture, given a code
+
+### Data fetch for dashboard
+
+- `GET` my-presences : for a pupil, get all the presences (or not)
+- `GET` my-lectures : for a teacher, get all the lectures they are hosting
+- `GET` presence-report : for the administration, get a full report of the presences
 
 ## Code structure
 
