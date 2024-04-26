@@ -14,10 +14,11 @@ async function loginFront() {
             password: form.password.value,
         })
     });
+    
     // Vérification
     if (response.ok){
         const data = await response.json();
-        // TODO : gérer la connexion
+        //TODO : gérer la connexion, rediriger vers les pages appropriées
     }
     else{
         alert("Mauvais identifiant ou mot de passe");
