@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>ENSTA Sign</title>
+    <!-- Police : Open Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <!-- Lien avec le CSS -->
+    <link href="styles/main.css" rel="stylesheet">
+    <script src="./scripts/login.js"></script>
+
+    <body>
+      
+      <nav>
+        <div class="header_login">
+          <a href="index.html" class="logo" aria-label="Accueil">
+            <img src="images/logo_ensta_paris_gris.png" alt="Logo ENSTA Paris" height="50px" width="auto" />
+          </a>
+        
+        <ul class="navigation-links">
+          <li class="navigation-item"><a href="generation.html">Faire l'appel</a></li>
+          <li class="navigation-item">Lorem</li>
+        </ul>
+      </nav>
+
+      <main>
+          <div class="wrap_login">
+              
+                  <img src="images/logo_ensta_paris.jpg" alt="Logo ENSTA Paris" height="200vh" width="auto" />
+                  <h1>Entrez vos identifiants</h1>
+              </div>
+              <!-- formulaire de connexion -->
+              <!-- TODO : Validation UI-->
+              <form action="javascript:loginFront()" method="post">
+                  <div class="form_login">
+                      <input type="text" id="email" name="email" placeholder="Adresse email" required="required"/>
+                  </div>
+                  <div class="form_login">
+                      <input type="password" is="pwd" name="pwd" placeholder="Mot de passe" required="required"/>
+                  </div>
+                  <div class="form_login">
+                      <input type="submit" value="Se connecter" />
+                  </div>
+                  
+  
+              </form>
+          </div>
+      </main>
+  
+  </head>
