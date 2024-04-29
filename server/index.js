@@ -1,8 +1,13 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 // Importing all the values stored in the .env
 require('dotenv').config();
+
+// CORS (Cross-Origin resource sharing) policy middleware, to enable the client to interact with the API
+// https://developer.mozilla.org/fr/docs/Web/HTTP/CORS
+app.use(cors())
 
 // Cookie parsing middleware, to have access to them with req.cookies
 const cookieParser = require('cookie-parser');
