@@ -6,7 +6,7 @@
     </div>
     <!-- formulaire de connexion -->
     <!-- TODO : Validation UI-->
-    <form>
+    <div>
       <div class="form_login">
         <input v-model="email" type="email" id="email" name="email" placeholder="Adresse email" required="required"/>
       </div>
@@ -14,10 +14,10 @@
         <input v-model="password" type="password" is="pwd" name="pwd" placeholder="Mot de passe" required="required"/>
       </div>
       <div class="form_login">
-        <input type="submit" value="Se connecter" @click="onLogin" />
+        <button @click="onLogin">Se connecter</button>
       </div>
 
-    </form>
+    </div>
   </div>
 </template>
 
@@ -26,8 +26,10 @@ import { ref } from "vue";
 
 // --------- STORES ------------
 import { useAuthStore } from "@/stores/auth.js";
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
+const router = useRouter()
 
 // --------- REFS ----------
 const email = ref('')
@@ -54,7 +56,7 @@ h1{
 }
 
 body{
-  background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("../public/backgrounds/amphi2026.png");
+  background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("/public/backgrounds/amphi2026.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100vw auto;

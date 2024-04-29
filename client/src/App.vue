@@ -7,6 +7,10 @@
         <RouterLink
             v-if="authStore.data.role === 'professeur'"
             to="/generate">Générer un code</RouterLink>
+        {{ authStore.data.firstname }} {{ authStore.data.lastName }}
+        <RouterLink
+          @click="authStore.logout()"
+          to="/login">Se déconnecter</RouterLink>
       </nav>
     </div>
   </header>

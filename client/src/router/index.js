@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from "@/views/Login.vue";
-import { endpoints } from "@/data/api.js";
+import { useAuthStore } from '@/stores/auth.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,16 +28,10 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  try {
-    const response = await fetch(endpoints.profile, {
-      method: "GET"
-    })
-    console.log(response)
+  const authStore = useAuthStore()
 
-    next()
-  } catch {
-    return { name: 'login' }
-  }
+  if (to.name === 'login' || await authStore.getSession()) next()
+  else return { name: 'login' }
 })
 
 export default router

@@ -1,30 +1,34 @@
 import { defineStore } from 'pinia'
 import { ref } from "vue";
+import { endpoints } from '@/utils/api.js'
+import { request } from '@/utils/api.js'
 
 export const useAuthStore = defineStore('auth', () => {
   const authenticated = ref(false)
   const data = ref({})
 
+  async function getSession() {
+    const response = await request(endpoints.profile)
+    if (response.ok) {
+      authenticated.value = true
+      data.value = await response.json()
+      return true
+    } else return false
+  }
+
   async function login(email, password) {
-    const form = {
-      email,
-      password,
-    };
-
-
     // TODO : éventuellement try/catch pour gestion d'erreur du fetch en lui-même
-    const response = await fetch(endpoints.login, {
-      method: "POST",
-      body:   JSON.stringify({
-        email: form.email.value,
-        password: form.password.value,
-      })
+    const response = await request(endpoints.login, 'POST', {
+      email,
+      password
     });
 
     // Vérification
     if (response.ok){
-      data.value = await response.json();
+      const json = await response.json();
+      data.value = json.user;
       authenticated.value = true
+      localStorage.setItem('token', json.token);
       return true
     }
     else{
@@ -34,5 +38,11 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { authenticated, data, login }
+  function logout() {
+    authenticated.value = false;
+    data.value = {};
+    localStorage.removeItem('token');
+  }
+
+  return { authenticated, data, login, logout, getSession }
 })
