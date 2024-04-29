@@ -12,7 +12,10 @@ module.exports = function loginRoute(req, res, next) {
     const result = checkUser(email, password);
 
     if (result.found) {
-      res.status(201).cookie('token', result.token, {signed: true}).json(result.user);
+      res.status(201).json({
+        token: result.token,
+        user: result.user
+      });
     } else {
       res.status(403).json({
         error: 'invalid email and/or password'
@@ -27,7 +30,10 @@ function checkUser(email, password) {
       found: true,
       token: 'abcabc',
       user: {
-        name: 'John Doe'
+        firstname: 'Théo',
+        lastname: 'Vidal',
+        email: 'theo.vidal@ensta-paris.fr',
+        role: 'professeur'
       }
     };
   else return {

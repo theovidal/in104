@@ -8,6 +8,7 @@ require('dotenv').config();
 // CORS (Cross-Origin resource sharing) policy middleware, to enable the client to interact with the API
 // https://developer.mozilla.org/fr/docs/Web/HTTP/CORS
 app.use(cors())
+app.options('*', cors()) // include before other routes
 
 // Cookie parsing middleware, to have access to them with req.cookies
 const cookieParser = require('cookie-parser');
