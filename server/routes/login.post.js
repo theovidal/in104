@@ -1,6 +1,8 @@
 const db = require('../../db/models')
 
-module.exports = function loginRoute(req, res, next) {
+// Route where users can authenticate using an email and password
+// Will return their token and data if success, or an error if their credentials are invalid
+module.exports = function loginRoute(req, res) {
   if (res.locals.authenticated) {
     res.json(res.locals.user);
   } else {
@@ -24,6 +26,7 @@ module.exports = function loginRoute(req, res, next) {
   }
 }
 
+// Check if the email and password are matching one user, and if so, create a new authentication token
 function checkUser(email, password) {
   if (email === 'john@example.com' && password === 'john')
     return {

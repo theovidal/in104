@@ -1,3 +1,6 @@
+// The authentication middleware checks if the user is connected :
+// - if not, immediately stops the request
+// - if yes, retrieves the user information and passes it to the routes using the res.locals dictionary
 module.exports = function authMiddleware(req, res, next) {
   // Would be a CORS request
   if (req.method === 'OPTIONS') {

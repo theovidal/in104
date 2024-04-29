@@ -37,11 +37,11 @@ app.use(errorHandler);
 
 const db = require("../db")
 
-// initializing ze base de données
+// Initialize the database and start the server
 db.sync({force: true}).then(() => {
   app.listen(process.env.PORT, () => {
     console.log(`✅ Listening on port ${process.env.PORT}`);
   })
 }).catch( () => {
-  console.error("Error while creating the database")
+  console.error("❌ Error while creating the database")
 })
