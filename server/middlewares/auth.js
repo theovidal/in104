@@ -30,7 +30,9 @@ function checkToken(token) {
   return {
     found: true,
     user: {
-      name: 'John Doe',
+      firstname: 'Théo',
+      lastname: 'Vidal',
+      email: 'theo.vidal@ensta-paris.fr',
       role: 'professeur'
     }
   };
