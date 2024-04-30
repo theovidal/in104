@@ -12,4 +12,6 @@ function insert_code(key, value) {
         });
 }
 
-module.exports = {insert_code}
+//fonction de delete, de read, delete codes[key], read renvoie undefined si codes[key] n'existe pas
+
+module.exports = {insert_code, codes}
