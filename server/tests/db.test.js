@@ -14,12 +14,22 @@ test("token db controller", async() => {
 		});
 
 		let expireAt = new Date();
+
+		const token = await tokens.create(user.id, expireAt);
+
 		expireAt.setDate(expireAt.getDate()+1);
 
-		await tokens.create(user.id, "abcde1992", expireAt);
+		const other_token = await tokens.create(user.id, expireAt);
 
-		expect( await tokens.test(1, "abcde1992") ).toBe(true);
-		expect( await tokens.test(1, "abddcde1992") ).toBe(false);
+		expect( await tokens.test(other_token.token) ).not.toBe(null);
+		expect( await tokens.test("1234") ).toBe(null);
+
+		await tokens.removeExpiredTokens(user.id)
+
+		expect( await tokens.test(token.token) ).toBe( null );
+
+		const user_data = await tokens.test(other_token.token);
+		expect(user_data.id).toBe(user.id);
 	}
 	catch(err) {
 		console.error(err);
