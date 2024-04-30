@@ -58,7 +58,7 @@ pnpm dev
 
 ## Run the tests
 
-Tests are made using Jest for the API side.
+Tests are made using Jest for the API side. Before all, make sure to run the development server (see section above).
 
 Run all the unit and coverage tests :
 
