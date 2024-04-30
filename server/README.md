@@ -11,6 +11,7 @@ Every API request must contain the user token in the `Authentication` header, ex
 - `POST` login : action of logging in using email and password ; include in the body :
   - email
   - password
+- `POST` logout : action of logging out (i.e. destroying the token)
 - `GET` profile : get all the information of the user (assuming they're authenticated)
 
 ### Interaction with courses
