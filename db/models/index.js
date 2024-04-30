@@ -17,5 +17,6 @@ db.Presences = require("./presence.js")(sequelize, Sequelize);
 
 // creacheune of ze liens betweens la data
 db.Users.hasMany(db.Tokens);
+db.Tokens.belongsTo(db.Users);
 
 module.exports = db;

@@ -9,18 +9,15 @@ const bcrypt = require("bcrypt");
 exports.getByEmail = (email) => {
 	return new Promise((resolve, reject) => {
 		db.Users.findOne({where: {email: email}}).then( val => {
-			if(val !== null) {
-				resolve(val.dataValues);
-			}
-			resolve(null);
+			resolve(val !== null ? val.dataValues: null);
 		})
 	})
 }
 
 exports.getById = (id) => {
 	return new Promise((resolve, reject) => {
-		db.Users.findByPk(id).then( user => {
-			resolve(user === null ? user: user.dataValues);
+		db.Users.findByPk(id).then( val => {
+			resolve(val !== null ? val.dataValues: null);
 		});
 	});
 }
@@ -53,11 +50,10 @@ exports.create = ({firstname, lastname, email, role, password}) => {
 
 /**
  * vérifie que les données de connexion sont les bonnes, [password] ne doit pas être haché car il le sera dans cette fonction
- * @param {*} email 
- * @param {*} password 
+ * @param {string} email 
+ * @param {string} password 
  */
 exports.testCredentialsByEmail = (email, password) => {
-
 	// j'ai eu un problème avec ça donc au fur et à mesure, j'ajoute des conditions
 	return new Promise((resolve, reject) => {
 		if( email === undefined || password === undefined)  {
@@ -66,6 +62,11 @@ exports.testCredentialsByEmail = (email, password) => {
 
 		// récupération de l'objet "utilisateur" dans la bdd
 		exports.getByEmail(email).then( user => {
+			if(user == null ) {
+				reject("no user associated with email");
+				return;
+			}
+
 			bcrypt.compare(password, user.passwordHash, (err, same) => {
 				if(err !== undefined) {
 					reject(err)
@@ -78,8 +79,8 @@ exports.testCredentialsByEmail = (email, password) => {
 
 /**
  * vérifie que les données de connexion sont les bonnes, [password] ne doit pas être haché car il le sera dans cette fonction
- * @param {*} id 
- * @param {*} password 
+ * @param {int} id 
+ * @param {string} password 
  */
 exports.testCredentialsById = (id, password) => {
 
@@ -115,7 +116,7 @@ exports.removeById = (id) => {
 
 /**
  * met à jour les données de l'utilisateur associé à [email],
- * @param {*} email 
+ * @param {string} email 
  * @param {firstname, lastname, email, role, password} newUser si un des champs est égal à [undefined] alors sa valeure n'est pas mise à jour
  */
 exports.updateByEmail = (email, newUser) => {

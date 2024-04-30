@@ -1,5 +1,10 @@
 const db = require("../../db/models");
-const {Op} = require("sequelize")
+const {Op} = require("sequelize");
+const crypto = require("crypto")
+
+const generateToken = (userId) => {
+	return crypto.randomBytes(30).toString("hex") + (Date.now().toString()) + crypto.createHmac("md5", "k8bb;àçéjirIHGYé_7").update(String(userId)).digest()
+}
 
 /**
  * créer un jeton d'identification pour userId qui expire le expireAt
@@ -8,8 +13,9 @@ const {Op} = require("sequelize")
  * @param {*} token une chaine de caractère quelconque
  * @param {*} expireAt une date sous format standard ISO, par exemple: (new Date()).toISOString()
  */
-exports.create = (userId, token, expireAt) => {
+exports.create = (userId, expireAt) => {
 	return new Promise((resolve, reject) => {
+		const token = generateToken();
 		db.Tokens.create({userId, token, expireAt})
 			.then( token => resolve(token.dataValues))
 			.catch( err => reject(err) );
@@ -18,35 +24,36 @@ exports.create = (userId, token, expireAt) => {
 
 /**
  * Vérifie que [token] est bien associé à [userId] et n'a pas expiré
- * @param {int} userId 
  * @param {string} token 
- * @returns {Promise<bool>} un booléen
+ * @returns {Promise<any>} promèsse vers un objet user (/!\ cet objet contient le haché de l'utilisateur )
  */
-exports.test = (userId, token) => {
+exports.test = (token) => {
 	return new Promise((resolve, reject) => {
 		db.Tokens.findAll({
 			where: {
-				userId,
 				token,
 				expireAt: { [Op.gte]: (new Date()) }
-			}
+			},
+			include: db.Users
 		}).then( values => {
 			const dataValues = values.map( val => val.dataValues);
-			resolve( dataValues.length != 0 )
-		}).catch( err => reject(err) )
+			if(dataValues.length != 1) {
+				resolve(null);
+			} else {
+				resolve(dataValues[0].user)
+			}
+		}).catch( err => reject(err) );
 	});
 }
 
 /**
- * supprimer tout les jetons de [userId] qui ont expirés
- * @param {int} userId 
+ * supprimer tout les jetons de la base de donnée qui ont expirés
  * @returns {Promise<>}
  */
-exports.removeExpiredTokens = (userId) => {
+exports.removeExpiredTokens = () => {
 	return new Promise( (resolve, reject) => {
 		db.Tokens.destroy({
 			where: {
-				userId,
 				expireAt: { [Op.lt]: (new Date()) }
 			}
 		}).then( _ => {
@@ -56,15 +63,13 @@ exports.removeExpiredTokens = (userId) => {
 }
 
 /**
- * supprimer le token [token] associé à [userId], ne fait rien s'il n'existe pas
- * @param {*} userId 
+ * supprimer le token [token], ne fait rien s'il n'existe pas
  * @param {*} token 
  */
-exports.remove = (userId, token) => {
+exports.remove = (token) => {
 	return new Promise( (resolve, reject) => {
 		db.Tokens.destroy({
 			where: {
-				userId,
 				token
 			}
 		}).then( _ => {

@@ -1,3 +1,4 @@
+const db = require("../../db/models");
 
 exports.create = (teacher, name) => {
 
