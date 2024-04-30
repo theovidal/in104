@@ -1,8 +1,15 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
+const user = require('./controllers/user');
 
 // Importing all the values stored in the .env
 require('dotenv').config();
+
+// CORS (Cross-Origin resource sharing) policy middleware, to enable the client to interact with the API
+// https://developer.mozilla.org/fr/docs/Web/HTTP/CORS
+app.use(cors())
+app.options('*', cors()) // include before other routes
 
 // Cookie parsing middleware, to have access to them with req.cookies
 const cookieParser = require('cookie-parser');
@@ -31,11 +38,18 @@ app.use(errorHandler);
 
 const db = require("../db")
 
-// initializing ze base de données
-db.sync({force: true}).then(() => {
+// Initialize the database and start the server
+db.sync({alter: true}).then(() => {
+  user.create({
+    firstname: "Théo",
+    lastname: "Vidal",
+    email: "theo.vidal@ensta-paris.fr",
+    role: "eleve",
+    password: "abcabc"
+  })
   app.listen(process.env.PORT, () => {
     console.log(`✅ Listening on port ${process.env.PORT}`);
   })
 }).catch( () => {
-  console.error("Error while creating the database")
+  console.error("❌ Error while creating the database")
 })

@@ -6,7 +6,7 @@ const Tokens = (sequelize, Sequelize) => {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		expiration_date: {
+		expireAt: {
 			type: DataTypes.DATE,
 			allowNull: false
 		}

@@ -2,6 +2,8 @@
 
 This folder contains the Back-End of our application, which consists of a REST API.
 
+Every API request must contain the user token in the `Authentication` header, except for the login route (obviously).
+
 ## Routes
 
 ### User management
@@ -9,7 +11,6 @@ This folder contains the Back-End of our application, which consists of a REST A
 - `POST` login : action of logging in using email and password ; include in the body :
   - email
   - password
-- `POST` logout : removes the session of the user
 - `GET` profile : get all the information of the user (assuming they're authenticated)
 
 ### Interaction with courses

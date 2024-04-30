@@ -1,8 +1,8 @@
 # Base de donnée
 
-À des fins pédagogiques, ce projet utilise une base de donnée faite maison en C.
+À des fins pédagogiques, ce projet utilise une base de donnée faite maison en C++.
 
-Dans un premier temps, cette base de donnée va juste charger un csv en mémoire et effectuer des opération CRUD dessus. L'objectif à terme est d'améliorer ce système jusqu'à obtenir un système à peu près complet.
+Dans un premier temps, cette base de donnée va juste charger un fichier en mémoire et effectuer des opération CRUD dessus. L'objectif à terme est d'améliorer ce système jusqu'à obtenir un système à peu près complet.
 
 # Objectifs
 

@@ -1,17 +1,18 @@
-# in104
-
-A website project made for ENSTA courses by Arnaud Pelissier, Seydou Sene, Doris Diallo and Théo Vidal.
+<div align="center">
+    <h1>ENSTA Sign</h1>
+    <h3>A project made for IN104 at <a href="ENSTA Paris">ENSTA Paris</a></h3>
+    Arnaud Pelissier ‒ Seydou Sene ‒ Doris Diallo ‒ Théo Vidal<br>
+    <a href="https://data-ensta.notion.site/IN104-5080e615e0284753b8b3f09e9233b825?pvs=74">Homepage</a>
+</div>
 
 The goal of this project is to develop an app for teachers to take the register using regenerating QR-codes (to prevent students sharing it).
-
-[Project homepage]((https://bow-chevre-f4f.notion.site/IN104-5080e615e0284753b8b3f09e9233b825?pvs=4) (in french)
 
 ## Project setup
 
 First, check that you have all the following dependencies :
 
-- Git
-- Node.Js with a package manager (NPM, Yarn, pnpm...)
+- Git (latest version)
+- Node.Js v20 (or above) with a package manager (NPM, Yarn, pnpm...)
 
 Clone the repository on your local machine :
 
@@ -26,18 +27,33 @@ Install all the dependencies :
 npm install  # with NPM
 yarn install # with Yarn
 pnpm install # with PNPM
+
+cd client
+(do the same command)
 ```
 
 Create a `.env` file at the root of the folder (so at the same level as `index.js`) and populate it with the values given in the [example .env](../.env.example).
 
 ## Run a development server
 
-Run the server :
+Run the API server :
 
 ```bash
-npm run dev  # Using NPM
-yarn dev     # Using Yarn
-pnpm dev     # Using PNPM
+npm run serve  # Using NPM
+yarn serve     # Using Yarn
+pnpm serve     # Using PNPM
+```
+
+Details of the architecture and API routes can be found in [the server folder](./server/README.md).
+
+Then, serve the client located in the `/client` directory :
+
+```bash
+cd /client
+
+npm run dev
+yarn dev
+pnpm dev
 ```
 
 ## Run the tests
@@ -54,7 +70,17 @@ pnpm test     # Using PNPM
 
 ## Build & deploy for production
 
-TODO
+Build the static files for the client :
+
+```bash
+cd /client
+
+npm run build
+yarn build
+pnpm build
+```
+
+And deploy the API on a server that supports Node.js. You'll use the same command as in the development, i.e. `npm run serve`.
 
 ## License
 

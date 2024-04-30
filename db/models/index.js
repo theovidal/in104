@@ -7,13 +7,15 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // importing ze modèles
-const Users = require("./users.js");
-db.Users = Users(sequelize, Sequelize);
+db.Users = require("./users.js")(sequelize, Sequelize);
 
-const Tokens = require("./tokens.js");
-db.Tokens = Tokens(sequelize, Sequelize);
+db.Tokens = require("./tokens.js")(sequelize, Sequelize);
+db.Attendance = require("./attendance.js")(sequelize, Sequelize);
+db.Courses = require("./courses.js")(sequelize, Sequelize);
+db.Lectures = require("./lectures.js")(sequelize, Sequelize);
+db.Presences = require("./presence.js")(sequelize, Sequelize);
 
 // creacheune of ze liens betweens la data
-db.Tokens.hasOne(db.Users);
+db.Users.hasMany(db.Tokens);
 
 module.exports = db;

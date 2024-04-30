@@ -14,9 +14,13 @@ const Users = (sequelize, Sequelize) => {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-		password_hash: {
+		passwordHash: {
 			type: DataTypes.STRING,
 			allowNull: false,
+		},
+		role: {
+			type: DataTypes.STRING,
+			allowNull: false
 		}
 	});
 	return Users;
