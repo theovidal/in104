@@ -16,7 +16,8 @@ Every API request must contain the user token in the `Authentication` header, ex
 
 ### Interaction with courses
 
-- `POST` create-code : action for teachers to create a code for a certain course
+- `POST` create-code : action for teachers to create a code for a certain course ; include in the body :
+  - cours : id du cours où l'on veut créer un qr code
 - `POST` scan-code : action for pupils to mark their presence at a certain lecture, given a code
 
 ### Data fetch for dashboard
