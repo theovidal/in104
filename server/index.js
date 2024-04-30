@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const user = require('./controllers/user');
+const users = require('./controllers/users');
 
 // Importing all the values stored in the .env
 require('dotenv').config();
@@ -39,8 +39,8 @@ app.use(errorHandler);
 const db = require("../db")
 
 // Initialize the database and start the server
-db.sync({alter: true}).then(() => {
-  user.create({
+db.sync({force: true}).then(() => {
+  users.create({
     firstname: "Théo",
     lastname: "Vidal",
     email: "theo.vidal@ensta-paris.fr",
