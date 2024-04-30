@@ -39,7 +39,7 @@ app.use(errorHandler);
 const db = require("../db")
 
 // Initialize the database and start the server
-db.sync({force: true}).then(() => {
+db.sync({alter: true}).then(() => {
   user.create({
     firstname: "Théo",
     lastname: "Vidal",
