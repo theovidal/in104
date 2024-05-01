@@ -1,7 +1,12 @@
 const { Sequelize } = require("sequelize");
 
-const db_type = process.env.DB_TYPE;
-const db_path = process.env.DB_TYPE === "sqlite" ? "database.sqlite": undefined;
+const [db_type, db_path] = (()=> {
+	if( process.env.TEST_DB == "yes" ) {
+		return ["sqlite", "testdb.sqlite"]
+	} else {
+		return ["sqlite", "proddb.sqlite"]
+	}
+})()
 
 const sequelize = new Sequelize( {
 	dialect: db_type,
@@ -9,7 +14,7 @@ const sequelize = new Sequelize( {
 	logging: false
 });
 
-console.log(`BDD: type ${process.env.DB_TYPE} storage ${db_path}`)
+console.log(`BDD: type ${db_type} storage ${db_path}`)
 
 sequelize
 	.authenticate()

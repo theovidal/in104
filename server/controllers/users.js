@@ -117,7 +117,7 @@ exports.removeById = (id) => {
 /**
  * met à jour les données de l'utilisateur associé à [email],
  * @param {string} email 
- * @param {firstname, lastname, email, role, password} newUser si un des champs est égal à [undefined] alors sa valeure n'est pas mise à jour
+ * @param {{firstname, lastname, email, role, password}} newUser si un des champs est égal à [undefined] alors sa valeur n'est pas mise à jour
  */
 exports.updateByEmail = (email, newUser) => {
 	// retire les clefs non définies de l'objet newUser
@@ -141,7 +141,7 @@ exports.updateByEmail = (email, newUser) => {
 /**
  * met à jour les données de l'utilisateur associé à [id],
  * @param {*} id 
- * @param {firstname, lastname, email, role, password} newUser si un des champs est égal à [undefined] alors sa valeure n'est pas mise à jour
+ * @param {{firstname, lastname, email, role, password}} newUser si un des champs est égal à [undefined] alors sa valeur n'est pas mise à jour
  */
 exports.updateById = (id, newUser) => {
 	// retire les clefs non définies de l'objet newUser

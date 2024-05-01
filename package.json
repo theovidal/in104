@@ -4,8 +4,8 @@
   "description": "",
   "main": "server/index.js",
   "scripts": {
-    "dev": "DB_TYPE=sqlite nodemon server/index.js",
-    "test": "DB_TYPE=sqlite::memory jest"
+    "dev": "TEST_DB=no nodemon server/index.js",
+    "test": "TEST_DB=yes jest"
   },
   "keywords": [],
   "author": "",
