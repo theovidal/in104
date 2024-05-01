@@ -24,10 +24,6 @@ exports.generatePresencesById = (id) => {
 
 }
 
-exports.generatePresencesByName = (name) => {
-	
-}
-
 exports.updateByName = (id, newCourse) => {
 
 }

@@ -29,7 +29,7 @@ registerRoutes(app);
 const errorHandler = require('./middlewares/errors');
 app.use(errorHandler);
 
-const db = require("../db")
+const db = require("../db");
 
 // initializing ze base de données
 db.sync({alter: true}).then(() => {
