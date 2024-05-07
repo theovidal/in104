@@ -4,8 +4,8 @@
   "description": "",
   "main": "server/index.js",
   "scripts": {
-    "serve": "npx nodemon server/index.js",
-    "test": "jest"
+    "dev": "TEST_DB=no nodemon server/index.js",
+    "test": "TEST_DB=yes jest"
   },
   "keywords": [],
   "author": "",

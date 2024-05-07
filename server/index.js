@@ -36,7 +36,7 @@ registerRoutes(app);
 const errorHandler = require('./middlewares/errors');
 app.use(errorHandler);
 
-const db = require("../db")
+const db = require("../db");
 
 // Initialize the database and start the server
 db.sync({force: true}).then(() => {

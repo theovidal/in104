@@ -3,7 +3,7 @@ const {Op} = require("sequelize");
 const crypto = require("crypto")
 
 const generateToken = (userId) => {
-	return crypto.randomBytes(30).toString("hex") + (Date.now().toString()) + crypto.createHmac("md5", "k8bb;àçéjirIHGYé_7").update(String(userId)).digest()
+	return crypto.randomBytes(30).toString("hex") + (Date.now().toString()) + crypto.createHmac("md5", "k8bb;àçéjirIHGYé_7").update(String(userId)).digest("hex")
 }
 
 /**
