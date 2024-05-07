@@ -19,6 +19,9 @@ const router = createRouter({
     {
       path: '/generate',
       name: 'generate',
+      meta: {
+        roles: ['professeur']
+      },
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -30,8 +33,11 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
-  if (to.name === 'login' || await authStore.getSession()) next()
-  else return { name: 'login' }
+  const isLogged = await authStore.getSession()
+  if (to.name !== 'login' && !isLogged) return '/login'
+
+  if (to.meta.roles !== undefined && !to.meta.roles.includes(authStore.data.role)) return '/'
+  next()
 })
 
 export default router

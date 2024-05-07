@@ -3,10 +3,11 @@ const apiUrl = 'http://localhost:8080'
 const endpoints = {
   login: apiUrl + '/login',
   profile: apiUrl + '/profile',
+  createCode: apiUrl + '/create-code'
 }
 
-async function request(url, method = 'GET', params = undefined) {
-  return await fetch(url, {
+function request(url, method = 'GET', params = undefined) {
+  return fetch(url, {
     method: method,
     headers: {
       'Content-Type': 'application/json',

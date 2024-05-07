@@ -2,7 +2,7 @@
   <header>
     <div class="wrapper">
       <nav v-if="authStore.authenticated">
-        <img alt="ENSTA logo" class="logo" src="/public/logo_ensta_paris.jpg" width="125" height="125" />
+        <img alt="ENSTA logo" class="logo" src="/logo_ensta_paris.jpg" width="125" height="125" />
         <RouterLink to="/">Accueil</RouterLink>
         <RouterLink
             v-if="authStore.data.role === 'professeur'"

@@ -8,12 +8,16 @@ export const useAuthStore = defineStore('auth', () => {
   const data = ref({})
 
   async function getSession() {
-    const response = await request(endpoints.profile)
-    if (response.ok) {
-      authenticated.value = true
-      data.value = await response.json()
-      return true
-    } else return false
+    try {
+      const response = await request(endpoints.profile)
+      if (response.ok) {
+        authenticated.value = true
+        data.value = await response.json()
+      }
+      return response.ok
+    } catch {
+      return false
+    }
   }
 
   async function login(email, password) {
@@ -28,7 +32,7 @@ export const useAuthStore = defineStore('auth', () => {
       const json = await response.json();
       data.value = json.user;
       authenticated.value = true
-      localStorage.setItem('token', json.token);
+      localStorage.setItem('token', json.token.token);
       return true
     }
     else{

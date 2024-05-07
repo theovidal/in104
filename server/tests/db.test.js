@@ -82,7 +82,7 @@ test("course db controller", async() => {
 			firstname: "teacher",
 			lastname: "teacher",
 			email: "a@a.a",
-			role: "eleve",
+			role: "professeur",
 			password: "abcd"
 		});
 		

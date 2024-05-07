@@ -1,7 +1,7 @@
 <template>
   <div class="wrap_login">
     <div class="header_login">
-      <img src="/public/logo_ensta_paris.jpg" alt="Logo ENSTA Paris" height="200vh" width="auto" />
+      <img src="/logo_ensta_paris.jpg" alt="Logo ENSTA Paris" height="200vh" width="auto" />
       <h1>Entrez vos identifiants</h1>
     </div>
     <!-- formulaire de connexion -->
@@ -31,6 +31,8 @@ import { useRouter } from 'vue-router'
 const authStore = useAuthStore()
 const router = useRouter()
 
+if (authStore.authenticated) router.push('/')
+
 // --------- REFS ----------
 const email = ref('')
 const password = ref('')
@@ -43,7 +45,7 @@ function onLogin() {
 }
 </script>
 
-<style scoped>
+<style>
 html {
   font-size: 10px;
   font-family: 'Open Sans', sans-serif;
@@ -56,7 +58,7 @@ h1{
 }
 
 body{
-  background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("/public/backgrounds/amphi2026.png");
+  background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("/backgrounds/amphi2026.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100vw auto;
