@@ -13,9 +13,8 @@ module.exports = async function authMiddleware(req, res, next) {
   res.locals.authenticated = false;
 
   const token = req.headers['authentication'];
-  const id = req.headers['id'];
 
-  if (id === undefined || tokens === undefined) {
+  if (token === undefined) {
     res.status(401).json({
       error: 'unauthenticated'
     });
@@ -23,12 +22,14 @@ module.exports = async function authMiddleware(req, res, next) {
   }
 
   // Before checking any token, remove the expired ones
-  await tokens.removeExpiredTokens(id);
+  await tokens.removeExpiredTokens();
 
   try {
-    if (await tokens.test(id, token)) {
-      const data = await users.getById(id);
+    const user = await tokens.test(token)
+    if (user !== null) {
+      const data = user.dataValues;
       delete data.passwordHash;
+      console.log(data)
 
       res.locals.user = data;
       res.locals.authenticated = true;

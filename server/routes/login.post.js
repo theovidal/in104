@@ -12,24 +12,24 @@ module.exports = async function loginRoute(req, res) {
     const email = req.body.email;
     const password = req.body.password;
 
-    const test = await users.testCredentialsByEmail(email, password)
-    if (!test) {
+    try {
+      await users.testCredentialsByEmail(email, password)
+      const expiration = new Date();
+      expiration.setDate(expiration.getDate() + 7);
+      console.log(expiration.toISOString())
+
+      const user = await users.getByEmail(email);
+      const token = await tokens.create(user.id, expiration)
+      delete user.passwordHash;
+
+      res.status(201).json({
+        token,
+        user,
+      })
+    } catch {
       res.status(403).json({
         error: 'invalid email and/or password'
       })
-      return;
     }
-
-    const expiration = new Date();
-    expiration.setDate(expiration.getDate() + 7);
-
-    const user = await users.getByEmail(email);
-    const token = await tokens.create(user.id, crypto.randomBytes(30).toString('hex'), expiration)
-    delete user.passwordHash;
-
-    res.status(201).json({
-      token,
-      user,
-    })
   }
 }
