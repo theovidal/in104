@@ -40,7 +40,7 @@ const password = ref('')
 // --------- METHODS -----------
 function onLogin() {
   if (authStore.login(email.value, password.value)) {
-    router.push('/')
+    router.push(route.query.redirect || '/')
   }
 }
 </script>

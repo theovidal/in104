@@ -7,6 +7,9 @@
         <RouterLink
             v-if="authStore.data.role === 'professeur'"
             to="/generate">Générer un code</RouterLink>
+        <RouterLink
+          v-if="authStore.data.role === 'eleve'"
+          to="/scan">Scanner un code</RouterLink>
         {{ authStore.data.firstname }} {{ authStore.data.lastname }}
         <RouterLink
           @click="authStore.logout()"

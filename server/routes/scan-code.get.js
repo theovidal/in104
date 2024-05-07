@@ -12,8 +12,8 @@ module.exports = function scanCodeRoute(req, res) {
         //Interagir avec la BDD pour mettre l'élève présent
 
         //C'est tout
-
+        res.status(204).send()
     }
-
+    res.status(403).send()
 
 }

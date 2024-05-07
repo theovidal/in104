@@ -1,9 +1,10 @@
-const apiUrl = 'http://localhost:8080'
+const apiUrl = 'http://147.250.229.99:8080'
 
 const endpoints = {
   login: apiUrl + '/login',
   profile: apiUrl + '/profile',
-  createCode: apiUrl + '/create-code'
+  createCode: apiUrl + '/create-code',
+  scanCode: apiUrl + '/scan-code',
 }
 
 function request(url, method = 'GET', params = undefined) {
