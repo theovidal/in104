@@ -25,7 +25,7 @@ exports.create = (userId, expireAt) => {
 /**
  * Vérifie que [token] est bien associé à [userId] et n'a pas expiré
  * @param {string} token 
- * @returns {Promise<any>} promèsse vers un objet user (/!\ cet objet contient le haché de l'utilisateur )
+ * @returns {Promise<any>} promesse vers un objet user (/!\ cet objet contient le haché de l'utilisateur )
  */
 exports.test = (token) => {
 	return new Promise((resolve, reject) => {
