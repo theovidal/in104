@@ -22,8 +22,11 @@ module.exports = function createCodeRoute(req, res) {
 
     if (res.locals.user.role === 'professeur') {
         const cours_id = req.body.cours
-
-        if (cours_id === undefined); // erreur à gérer
+        if (cours_id === undefined) {
+            res.status(400).json({
+                error: 'Cours inexistant'
+            })
+        }
         // TODO: vérifier que cours_id existe dans la DB -> READ
         // TODO: c'est le bon prof
         const date = new Date();
