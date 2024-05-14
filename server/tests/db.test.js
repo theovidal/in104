@@ -2,6 +2,7 @@ const db = require("../../db");
 const users = require("../controllers/users");
 const courses = require("../controllers/courses");
 const tokens = require("../controllers/tokens");
+const lectures = require("../controllers/lectures");
 
 test("token db controller", async() => {
 	try {
@@ -119,6 +120,41 @@ test("course db controller", async() => {
 		expect(nothing).toBe(null);	
 	} catch(err) {
 		console.error(err)
+		expect(true).toBe(false)
+	}
+})
+
+test("presences db controller", async() => {
+	try {
+		const teacher = await users.create({
+			firstname: "teacher",
+			lastname: "teacher",
+			email: "a@a.a",
+			role: "prof",
+			password: "abcd"
+		})
+
+		const user = await users.create({
+			firstname: "arnaud",
+			lastname: "pelissier",
+			email: "a@a.a",
+			role: "eleve",
+			password: "1234"
+		})
+
+		const course = await courses.create( teacher.id, "IN104");
+
+		await courses.addAttendantById(course.id, teacher.id)
+		await courses.addAttendantById(course.id, user.id)
+
+		const lecture = await lectures.create(new Date(), 120, course.id);
+
+		const presences = await lectures.getPresences(lecture.id);
+
+		console.log(presences)
+
+	} catch (error) {
+		console.error(error)
 		expect(true).toBe(false)
 	}
 })

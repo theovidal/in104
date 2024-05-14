@@ -24,13 +24,13 @@ db.Tokens.belongsTo(db.Users);
 db.Users.hasMany(db.Courses, {as: "teacher", foreignKey: "teacherId"});
 db.Courses.belongsTo(db.Users, {as: "teacher", foreignKey: "teacherId"});
 
-// à chaque cours, plusieurs "instances"
-db.Courses.hasMany(db.Lectures);
-db.Lectures.belongsTo(db.Courses);
-
 // à chaque cours, une liste d'élèves
 db.Courses.belongsToMany(db.Users, {through: db.Attendances});
 db.Users.belongsToMany(db.Courses, {through: db.Attendances});
+
+// à chaque cours, plusieurs "instances"
+db.Courses.hasMany(db.Lectures);
+db.Lectures.belongsTo(db.Courses);
 
 // à chaque instance de cours, pleins d'élèves + s'ils sont là ou pas
 db.Lectures.belongsToMany(db.Users, {through: db.Presences});

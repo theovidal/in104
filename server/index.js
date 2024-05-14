@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const user = require('./controllers/user');
+const user = require('./controllers/users');
 
 // Importing all the values stored in the .env
 require('dotenv').config();
