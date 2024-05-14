@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const users = require('./controllers/users');
+
+const seedDatabase = require('./core/seed')
 
 // Importing all the values stored in the .env
 require('dotenv').config();
@@ -39,14 +40,8 @@ app.use(errorHandler);
 const db = require("../db");
 
 // Initialize the database and start the server
-db.sync({force: true}).then(() => {
-  users.create({
-    firstname: "Théo",
-    lastname: "Vidal",
-    email: "theo.vidal@ensta-paris.fr",
-    role: "eleve",
-    password: "abcabc"
-  })
+db.sync({force: true}).then(async () => {
+  await seedDatabase()
   app.listen(process.env.PORT, () => {
     console.log(`✅ Listening on port ${process.env.PORT}`);
   })
