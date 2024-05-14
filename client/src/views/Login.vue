@@ -23,12 +23,12 @@
 
 <script setup>
 import { ref } from "vue";
-
-// --------- STORES ------------
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from "@/stores/auth.js";
-import { useRouter } from 'vue-router'
 
+// --------- COMPOSABLES ------------
 const authStore = useAuthStore()
+const route = useRoute()
 const router = useRouter()
 
 if (authStore.authenticated) router.push('/')
