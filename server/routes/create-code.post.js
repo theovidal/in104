@@ -30,14 +30,14 @@ module.exports = function createCodeRoute(req, res) {
         const lecture_id = req.body.lectureId
         if (lecture_id === undefined) {
             res.status(400).json({
-                error: 'Séance inexistante'
+                error: 'Séance non précisée'
             })
         }
 
         const lecture = lectures_fun.getById(lecture_id);
         if (lecture === null) {
             res.status(400).json({
-                error: 'Cours inexistant'
+                error: 'Séance inexistante'
             })
         }
 
