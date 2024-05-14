@@ -22,7 +22,7 @@ module.exports = function createCodeRoute(req, res) {
 
     //génération et envoie du code, si l'utilisateur est un professeur
 
-    if (res.locals.user.role === 'professeur') {*
+    if (res.locals.user.role === 'professeur') {
 
         //Verifications
 
@@ -49,10 +49,10 @@ module.exports = function createCodeRoute(req, res) {
         }
 
         const date_requete = new Date();
-        const date_debut = lecture_id.createdAt;
-        const date_fin = lecture_id.createdAt;
+        const date_debut = lecture_id.date;
+        const date_fin = lecture_id.date;
         date_fin.setTime(date_fin.getTime() + 3_600_000);
-        //date_fin.setTime(date_fin.getTime() + lecture_id.durationMinutes * 60_000);
+        //ce sera beginDate et endDate dès que Arnaud l'aura fait
 
         if (date_debut > date_requete || date_fin < date_requete) {
             res.status(400).json({
