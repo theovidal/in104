@@ -1,11 +1,11 @@
 <template>
-  <div class="presences_wrap">
+  <div class="absences_wrap">
     <h1>Mes absences</h1>
     <div
       v-for="presence in presences"
       :key="presence.id"
       v-if="!presence.isPresent"
-      class="presence_block">
+      class="absence_block">
       {{ presence.date }} - {{ courses[presence.lecture.courseId].name }}
       {{  }}
     </div>
@@ -15,7 +15,7 @@
 <script setup>
 import { endpoints, request } from '@/utils/api.js'
 
-const response = await request(endpoints.presences)
+const response = await request(endpoints.absences)
 let presences = await response.json()
 
 let courses = {}
