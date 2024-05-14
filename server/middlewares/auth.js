@@ -1,36 +1,41 @@
+// The authentication middleware checks if the user is connected :
+// - if not, immediately stops the request
+// - if yes, retrieves the user information and passes it to the routes using the res.locals dictionary
 module.exports = function authMiddleware(req, res, next) {
+  // Would be a CORS request
+  if (req.method === 'OPTIONS') {
+    next()
+    return
+  }
   res.locals.authenticated = false;
 
-  const token = req.signedCookies.token;
+  const token = req.headers['authentication']
 
-  // Token can either be :
-  // - undefined, if non existent
-  // - false, if the signed token has been altered
-  if (token === undefined || token === false) {
-    if (req.url !== '/login') {
-      res.status(401).clearCookie('token');
-      throw new Error('unauthenticated');
-    }
+  const result = checkToken(token);
+  if (result.found) {
+    res.locals.user = result.user;
+    res.locals.authenticated = true;
   } else {
-    const result = checkToken(token);
-    if (result.found) {
-      res.locals.user = result.user;
-      res.locals.authenticated = true;
-    } else {
-      res.clearCookie('token').status(401);
-      throw new Error('expired token');
-    }
+    res.status(401);
+    throw new Error('unauthenticated');
   }
 
   next();
 }
 
-// TODO: check in the database the value of the cookie
+// TODO: check in the database the value of the token
 function checkToken(token) {
+  if (token !== 'abcabc') return {
+    found: false
+  }
+
   return {
     found: true,
     user: {
-      name: 'John Doe'
+      firstname: 'Théo',
+      lastname: 'Vidal',
+      email: 'theo.vidal@ensta-paris.fr',
+      role: 'professeur'
     }
   };
 }

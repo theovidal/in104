@@ -1,0 +1,19 @@
+const apiUrl = 'http://localhost:8080'
+
+const endpoints = {
+  login: apiUrl + '/login',
+  profile: apiUrl + '/profile',
+}
+
+async function request(url, method = 'GET', params = undefined) {
+  return await fetch(url, {
+    method: method,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authentication': localStorage.getItem('token')
+    },
+    body: JSON.stringify(params)
+  })
+}
+
+export {apiUrl, endpoints, request}
