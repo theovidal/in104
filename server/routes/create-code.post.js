@@ -1,6 +1,8 @@
 //crée le code sous-jacent au qr code généré lorsqu'un professeur (et non pas un élève) se connecte
 
+const { Courses } = require('../../db/models')
 const { insert_code } = require('../core/codes')
+const {getById} = require('../controllers/courses')
 
 module.exports = function createCodeRoute(req, res) {
 
@@ -22,9 +24,16 @@ module.exports = function createCodeRoute(req, res) {
 
     if (res.locals.user.role === 'professeur') {
         const cours_id = req.body.cours
-
-        if (cours_id === undefined); // erreur à gérer
-        // TODO: vérifier que cours_id existe dans la DB -> READ
+        if (cours_id === undefined) {
+            res.status(400).json({
+                error: 'Cours inexistant'
+            })
+        }
+        if (getById(cours_id === null)) {
+            res.status(400).json({
+                error: 'Cours inexistant'
+            })
+        }
         // TODO: c'est le bon prof
         const date = new Date();
         // TODO: vérifier l'heure
