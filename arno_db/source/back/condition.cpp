@@ -1,28 +1,27 @@
 #include "condition.hpp"
+#include <cstring>
 
 namespace adb
 {
 
+ConditionData::ConditionData()
+{
+
+}
+
 ConditionData::~ConditionData()
 {
-	switch( value_type )
+	switch( type )
 	{
-	case DT::INT:
-		delete (int*)value;
-		break;
-	case DT::TEXT:
-		delete (std::string*)value;
-		break;
-	default:
-		break;
+	
 	}
 }
 
 Condition CondAND(Condition left, Condition right)
 {
 	Condition cond( new ConditionData() );
-	cond->arg1 = left;
-	cond->arg2 = right;
+	cond->binary_op.arg1 = left;
+	cond->binary_op.arg2 = right;
 	cond->type = ConditionType::AND;
 	return cond;
 }
@@ -31,8 +30,8 @@ Condition CondAND(Condition left, Condition right)
 Condition CondOR(Condition left, Condition right)
 {
 	Condition cond( new ConditionData() );
-	cond->arg1 = left;
-	cond->arg2 = right;
+	cond->binary_op.arg1 = left;
+	cond->binary_op.arg2 = right;
 	cond->type = ConditionType::OR;
 	return cond;
 }
@@ -40,7 +39,7 @@ Condition CondOR(Condition left, Condition right)
 Condition CondNOT(Condition arg)
 {
 	Condition cond( new ConditionData() );
-	cond->arg1 = arg;
+	cond->binary_op.arg1 = arg;
 	cond->type = ConditionType::NOT;
 	return cond;
 }
@@ -49,8 +48,9 @@ Condition CondEQ(const std::string &field, Condition value)
 {
 	Condition cond( new ConditionData() );
 	cond->type = ConditionType::EQ;
-	cond->field = field;
-	cond->arg1 = value;
+	cond->value_op.field_name = new char[1+field.size()];
+	strcpy(cond->value_op.field_name, field.c_str());
+	cond->value_op.arg = value;
 	return cond;
 }
 
@@ -58,8 +58,9 @@ Condition CondG(const std::string &field, Condition value)
 {
 	Condition cond( new ConditionData() );
 	cond->type = ConditionType::G;
-	cond->field = field;
-	cond->arg1 = value;
+	cond->value_op.field_name = new char[1+field.size()];
+	strcpy(cond->value_op.field_name, field.c_str());
+	cond->value_op.arg = value;
 	return cond;
 }
 
@@ -67,8 +68,9 @@ Condition CondGE(const std::string &field, Condition value)
 {
 	Condition cond( new ConditionData() );
 	cond->type = ConditionType::GE;
-	cond->field = field;
-	cond->arg1 = value;
+	cond->value_op.field_name = new char[1+field.size()];
+	strcpy(cond->value_op.field_name, field.c_str());
+	cond->value_op.arg = value;
 	return cond;
 }
 
@@ -76,8 +78,9 @@ Condition CondL(const std::string &field, Condition value)
 {
 	Condition cond( new ConditionData() );
 	cond->type = ConditionType::L;
-	cond->field = field;
-	cond->arg1 = value;
+	cond->value_op.field_name = new char[1+field.size()];
+	strcpy(cond->value_op.field_name, field.c_str());
+	cond->value_op.arg = value;
 	return cond;
 }
 
@@ -85,8 +88,9 @@ Condition CondLE(const std::string &field, Condition value)
 {
 	Condition cond( new ConditionData() );
 	cond->type = ConditionType::LE;
-	cond->field = field;
-	cond->arg1 = value;
+	cond->value_op.field_name = new char[1+field.size()];
+	strcpy(cond->value_op.field_name, field.c_str());
+	cond->value_op.arg = value;
 	return cond;
 }
 
@@ -94,8 +98,7 @@ Condition CondINT( int val )
 {
 	Condition cond( new ConditionData() );
 	cond->type = ConditionType::DATA;
-	cond->value_type = DT::INT;
-	cond->value = new int(val);
+	cond->value = ValInt(val);
 	return cond;
 }
 
@@ -103,8 +106,7 @@ Condition CondTEXT( const std::string &str )
 {
 	Condition cond( new ConditionData() );
 	cond->type = ConditionType::DATA;
-	cond->value_type = DT::TEXT;
-	cond->value = new std::string(str);
+	cond->value = ValText(str);
 	return cond;
 }
 

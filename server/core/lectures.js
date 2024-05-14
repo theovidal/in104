@@ -17,7 +17,6 @@ function delete_lecture(code) {
     mutex
         .acquire()
         .then(function (release) {
-            //lectures à l'id id_professeur = code, jsp comment le traduire en code...
             delete lectures[code];
             release();
         });
@@ -27,7 +26,6 @@ function read_lecture(code) {
     mutex
         .acquire()
         .then(function (release) {
-            //lectures à l'id id_professeur = code, jsp comment le traduire en code...
             return lectures[code]; //le cas -undefined- est géré par les routes qui useront de cette fonction
             release();
         });

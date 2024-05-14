@@ -1,6 +1,8 @@
 #pragma once
 
 #include "defines.hpp"
+#include "row.hpp"
+
 #include <memory>
 #include <string>
 
@@ -14,18 +16,26 @@ enum class ConditionType
 
 struct ConditionData
 {
+	ConditionData();
 	~ConditionData();
 
 	// Condition récursives
 	ConditionType type;
-	std::shared_ptr<ConditionData> arg1;
-	std::shared_ptr<ConditionData> arg2;
 
-	// "feuilles"
-	std::string field;
+	union
+	{
+		struct {
+			std::shared_ptr<ConditionData> arg1;
+			std::shared_ptr<ConditionData> arg2;
+		} binary_op;
 
-	DT value_type;
-	void *value;
+		struct {
+			char *field_name;
+			std::shared_ptr<ConditionData> arg;
+		} value_op;
+
+		RowValue value;
+	};
 };
 
 using Condition = std::shared_ptr<ConditionData>;

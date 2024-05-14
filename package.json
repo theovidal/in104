@@ -4,8 +4,13 @@
   "description": "",
   "main": "server/index.js",
   "scripts": {
+<<<<<<< HEAD
     "dev": "TEST_DB=no nodemon server/index.js",
     "test": "TEST_DB=yes jest"
+=======
+    "serve": "npx nodemon server/index.js",
+    "test": "jest"
+>>>>>>> origin/db
   },
   "keywords": [],
   "author": "",
