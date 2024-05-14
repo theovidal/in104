@@ -159,3 +159,19 @@ exports.getAttendantsByName= (courseName) => {
 		}).catch( reject );
 	});
 }
+
+/**
+ * Récupère les séances associés au cours [courseId]
+ * @param {int} courseId 
+ * @returns Promise<Object[]>
+ */
+exports.getCourseLectures = (courseId) => {
+	return new Promise((resolve, reject) => {
+		db.Lectures.findAll({
+			where: {courseId: courseId}
+		}).then( vals => {
+			dataValues = vals.map( value => value.dataValues );
+			resolve(dataValues);
+		}).catch( reject );
+	});
+}

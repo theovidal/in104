@@ -40,18 +40,64 @@ exports.create = (beginDatetime, durationInMinutes, courseId) => {
 	});
 }
 
+/**
+ * Met à jour la présence d'un utilisateur à un cour
+ * @param {int} lectureId
+ * @param {int} userId
+ * @param {boolean} isPresent 
+ * @returns Promise<>
+ */
 exports.updatePresence = (lectureId, userId, isPresent) => {
-	return new Promise((resolve, reject) => {
+	return new Promise( async(resolve, reject) => {
+		try {
+			const presence = await db.Presences.findOne({
+				where: {
+					userId: userId,
+					lectureId: lectureId
+				}
+			});
 
+			await presence.set({
+				isPresent: isPresent
+			});
+
+			await presence.save();
+
+			resolve();
+		} catch( error ) {
+			reject(error);
+		}
 	});
 }
 
+/**
+ * 
+ * @param {int} lectureId 
+ * @param {int} userId 
+ * @returns Promise<bool>
+ */
 exports.isUserPresent = (lectureId, userId) => {
-	return new Promise((resolve, reject) => {
+	return new Promise( async(resolve, reject) => {
+		try {
+			const presence = await db.Presences.findOne({
+				where: {
+					userId: userId,
+					lectureId: lectureId
+				}
+			});
 
+			resolve(presence.dataValues.isPresent);
+		} catch( error ) {
+			reject(error);
+		}
 	});
 }
 
+/**
+ * Récupère la liste des utilisateurs présents à la séance [lectureId]
+ * @param {int} lectureId 
+ * @returns Promise<Object[]>
+ */
 exports.getPresences = (lectureId) => {
 	return new Promise((resolve, reject) => {
 		db.Users.findAll({
@@ -63,10 +109,15 @@ exports.getPresences = (lectureId) => {
 	});
 }
 
-exports.getCourseLectures = (courseId) => {
-
-}
-
+/**
+ * Rien à dire...
+ * @param {int} lectureId 
+ * @returns {Promise<>}
+ */
 exports.getById = (lectureId) => {
-
+	return new Promise((resolve, reject) => {
+		db.Lectures.findByPk(lectureId)
+			.then( value => resolve(value.dataValues))
+			.catch( reject );
+	});
 }

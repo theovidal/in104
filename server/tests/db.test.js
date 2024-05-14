@@ -149,9 +149,26 @@ test("presences db controller", async() => {
 
 		const lecture = await lectures.create(new Date(), 120, course.id);
 
-		const presences = await lectures.getPresences(lecture.id);
+		let presences = await lectures.getPresences(lecture.id);
+		presences = presences.map( el => el.id);
 
-		console.log(presences)
+		for(let id of presences) {
+			const predicate = id === teacher.id || id === user.id;
+			expect(predicate).toBe(true);
+		}
+
+		const lectureFound = await lectures.getById(lecture.id);
+
+		expect(lecture.id).toBe(lectureFound.id);
+
+		const isPresent = await lectures.isUserPresent(lecture.id, user.id);
+
+		await lectures.updatePresence(lecture.id, user.id, true);
+
+		const andNow = await lectures.isUserPresent(lecture.id, user.id);
+
+		expect(isPresent).toBe(false);
+		expect(andNow).toBe(true);
 
 	} catch (error) {
 		console.error(error)
