@@ -93,13 +93,12 @@ main{
 }
 
 .form_login{
-  /* TODO : style form */
   width: 100%;
   border-radius: 3px;
   margin: 15px;
 }
 
-input[type=text]{
+input[type=email]{
   background: #e6e6e6;
   border: #aaaaaa;
   min-width: fit-content;
@@ -117,7 +116,7 @@ input[type=password]{
   border-radius: 5px;
 }
 
-input[type=submit]{
+button{
   cursor:pointer;
   border-radius: 5px;
   background-color: #142654;
