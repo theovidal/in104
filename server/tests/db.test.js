@@ -3,6 +3,7 @@ const users = require("../controllers/users");
 const courses = require("../controllers/courses");
 const tokens = require("../controllers/tokens");
 const lectures = require("../controllers/lectures");
+const presences = require("../controllers/presences");
 
 test("token db controller", async() => {
 	try {
@@ -149,10 +150,10 @@ test("presences db controller", async() => {
 
 		const lecture = await lectures.create(new Date(), 120, course.id);
 
-		let presences = await lectures.getPresences(lecture.id);
-		presences = presences.map( el => el.id);
+		let pres = await lectures.getPresences(lecture.id);
+		pres = pres.map( el => el.id);
 
-		for(let id of presences) {
+		for(let id of pres) {
 			const predicate = id === teacher.id || id === user.id;
 			expect(predicate).toBe(true);
 		}
@@ -169,7 +170,6 @@ test("presences db controller", async() => {
 
 		expect(isPresent).toBe(false);
 		expect(andNow).toBe(true);
-
 	} catch (error) {
 		console.error(error)
 		expect(true).toBe(false)
