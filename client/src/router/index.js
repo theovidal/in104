@@ -18,7 +18,7 @@ const router = createRouter({
       component: Login
     },
     {
-      path: '/generate',
+      path: '/generate/:id',
       name: 'generate',
       meta: {
         roles: ['professeur']

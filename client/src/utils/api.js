@@ -1,4 +1,4 @@
-const apiUrl = 'http://147.250.229.99:8080'
+const apiUrl = 'http://localhost:8080'
 
 const endpoints = {
   login: apiUrl + '/login',

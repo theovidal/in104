@@ -39,8 +39,8 @@ app.use(errorHandler);
 const db = require("../db");
 
 // Initialize the database and start the server
-db.sync({force: true}).then(() => {
-  seedDatabase();
+db.sync({force: true}).then(async () => {
+  await seedDatabase()
   app.listen(process.env.PORT, () => {
     console.log(`✅ Listening on port ${process.env.PORT}`);
   })
