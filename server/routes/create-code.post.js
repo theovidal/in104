@@ -1,7 +1,7 @@
 //crée le code sous-jacent au qr code généré lorsqu'un professeur (et non pas un élève) se connecte
 
 const { Courses } = require('../../db/models')
-const { insert_code } = require('../core/lectures')
+const { insert_lecture, lectures } = require('../core/lectures')
 const { getById } = require('../controllers/courses')
 
 module.exports = function createCodeRoute(req, res) {
@@ -22,7 +22,10 @@ module.exports = function createCodeRoute(req, res) {
 
     //génération et envoie du code, si l'utilisateur est un professeur
 
-    if (res.locals.user.role === 'professeur') {
+    if (res.locals.user.role === 'professeur') {*
+
+        //Verifications
+
         const lecture_id = req.body.lectureId
         if (lecture_id === undefined) {
             res.status(400).json({
@@ -37,7 +40,9 @@ module.exports = function createCodeRoute(req, res) {
             })
         }
 
-        if (lecture_id.teacherId != res.locals.use.role) {
+        const course_id = getById(lecture_id.courseId);
+
+        if (course_id.teacherId != res.locals.user.role) {
             res.status(403).json({
                 error: 'Accès interdit'
             })
