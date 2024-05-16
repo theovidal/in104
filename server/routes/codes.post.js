@@ -4,7 +4,7 @@ const { Courses } = require('../../db/models')
 const { insert_code } = require('../core/codes')
 const {getById} = require('../controllers/courses')
 
-module.exports = function createCodeRoute(req, res) {
+module.exports = function createCode(req, res) {
 
     //fonction de génération aléatoire de chaîne de caractère, pas optimal finalement
 

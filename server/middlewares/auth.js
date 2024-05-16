@@ -6,7 +6,7 @@ const users = require('../controllers/users')
 // - if yes, retrieves the user information and passes it to the routes using the res.locals dictionary
 module.exports = async function authMiddleware(req, res, next) {
   // Would be a CORS request
-  if (req.method === 'OPTIONS' || req.url === '/login') {
+  if (req.method === 'OPTIONS' || (req.url === '/session' && req.method === 'POST')) {
     next();
     return;
   }

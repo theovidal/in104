@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 // Route where users can authenticate using an email and password
 // Will return their token and data if success, or an error if their credentials are invalid
-module.exports = async function loginRoute(req, res) {
+module.exports = async function createSession(req, res) {
   if (res.locals.authenticated) {
     res.json(res.locals.user);
   } else {

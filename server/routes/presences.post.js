@@ -2,7 +2,7 @@
 
 const { insert_code , codes} = require('../core/codes')
 
-module.exports = function scanCodeRoute(req, res) {
+module.exports = function createPresence(req, res) {
     if (res.locals.user.role === 'eleve') {
         qrcode = req.query.code;
         //Verifier que le code existe dans le dico create-code
