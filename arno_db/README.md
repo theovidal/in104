@@ -10,10 +10,12 @@ Dans un premier temps, cette base de donnée va juste charger un fichier en mém
 
 Données stockées en ascii, la base de donnée de permet que de faire des CRUDs simples sur une table à la fois. La base de donnée est stockée en entière dans la RAM.
 
+Statut: _OK_
+
 ## Deuxième jet
 
 * Ajout de clefs primaires et étrangères
-* Système de cache
+* Tout binariser
 
 ## Troisième jet
 

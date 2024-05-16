@@ -1,8 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+<<<<<<< HEAD
 
 const seedDatabase = require('./core/seed')
+=======
+const user = require('./controllers/users');
+>>>>>>> origin/db
 
 // Importing all the values stored in the .env
 require('dotenv').config();
