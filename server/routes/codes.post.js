@@ -69,10 +69,9 @@ module.exports = function createCode(req, res) {
             code: code
         })
 
-    } else { //dans ce cas, res.locals.user.role === 'eleve' normalement
-        //On envoie une erreur
+    } else {
         res.status(403).json({
-            error: 'Erreur dans la génération du code'
+            error: 'Acces interdit'
         })
     }
 }

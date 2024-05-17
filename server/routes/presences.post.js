@@ -51,12 +51,22 @@ module.exports = function createPresence(req, res) {
         //ce sera beginDate et endDate dès que Arnaud l'aura fait
 
         //Verifier que le code est avec le bon cours -> bonne heure, (bon prof ?)
+        const liste_eleves = courses_fun.getAttendantsById(course.id);
+        if (liste_eleves(user) === undefined) {
+            res.status(400).json({
+                error: 'Eleve et cours incompatibles'
+            })
+        }
+
 
         //On met l'élève présent
 
         lectures_fun.updatePresence(lecture_id, user.id, true);
 
-    }
+    } else {
+    res.status(403).json({
+        error: 'Erreur dans la génération du code'
+    })
 
 
 }
