@@ -1,10 +1,15 @@
 #pragma once
 
+#include <string>
 #include <cstdint>
 
 namespace adb
 {
 
+/**
+ * @brief Défintition les types de bases supporté par la BDD
+ * 
+ */
 enum class DT
 {
 	NIL,
@@ -14,7 +19,13 @@ enum class DT
 	BOOL
 };
 
-std::string to_string( DT type )
+/**
+ * @brief Renvoie les noms des types de base
+ * 
+ * @param type 
+ * @return std::string le type sous forme de std::string
+ */
+inline std::string to_string( DT type )
 {
 	switch( type )
 	{

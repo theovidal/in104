@@ -2,6 +2,7 @@
 #include <cassert>
 #include <iostream>
 #include <cstring>
+#include <sstream>
 
 namespace adb
 {
@@ -89,23 +90,23 @@ bool Table::apply_condition(const Row &row, const Condition &cond)
 			// get the value of the field in "row"
 			RowValue row_value = row.m_values[index];
 
-			if (cond->binary_op.arg1->type != ConditionType::DATA)
+			if (cond->value_op.arg->type != ConditionType::DATA)
 			{
-				throw std::runtime_error("Condition mal construite: l'enfant d'une condition de type (<=) doit être une valeur de même type que celle nommé par field_name");
+				throw std::runtime_error("Condition mal construite: l'enfant d'une condition binaire de type (<=, >=, ..) doit être une valeur de même type que celle nommé par field_name");
 			}
 
 			switch(cond->type)
 			{
 				case ConditionType::LE:
-					return comp_le(row_value, cond->binary_op.arg1->value);
+					return comp_le(row_value, cond->value_op.arg->value);
 				case ConditionType::GE:
-					return !comp_l(row_value, cond->binary_op.arg1->value);
+					return !comp_l(row_value, cond->value_op.arg->value);
 				case ConditionType::G:
-					return !comp_le(row_value, cond->binary_op.arg1->value);
+					return !comp_le(row_value, cond->value_op.arg->value);
 				case ConditionType::EQ:
-					return comp_eq(row_value, cond->binary_op.arg1->value);
+					return comp_eq(row_value, cond->value_op.arg->value);
 				case ConditionType::L:
-					return comp_l(row_value, cond->binary_op.arg1->value);
+					return comp_l(row_value, cond->value_op.arg->value);
 				default:
 					throw std::runtime_error("WTF??");
 			}
@@ -174,12 +175,90 @@ void Table::update( const Condition &cond, const Row &new_row )
 
 Table Table::get( const Condition &cond )
 {
+	Table query_table {m_name+"_result", m_layout};
 
+	for(const auto &row: m_rows)
+	{
+		if( apply_condition(row, cond) )
+		{
+			query_table.insert(row);
+		}
+	}
+
+	return query_table;
 }
 
-std::string Table::to_json()
+void Table::row_to_json(std::stringstream &ss, const std::vector<Field>& layout, const Row &row, bool nice_format)
 {
 
+	ss << "{";
+
+	if(nice_format)
+	{
+		ss << "\n";
+	}
+
+	auto it = row.m_values.begin();
+	for(size_t i = 0; i < layout.size(); ++i)
+	{
+		ss << "  \"" << layout[i].field_name << "\": ";
+		switch(it->type)
+		{
+			case DT::BOOL:
+				ss << it->bval ? "true": "false";
+				break;
+			case DT::FLOAT:
+				ss << it->fval;
+				break;
+			case DT::INT:
+				ss << it->ival;
+				break;
+			case DT::NIL:
+				ss << "null";
+				break;
+			case DT::TEXT:
+				ss << "\"" << it->sval << "\"";
+				break;
+			default:
+				assert(false);
+				break;
+		}
+
+		if(i != layout.size() - 1)
+		{
+			ss << ",";
+		}
+
+		if(nice_format)
+		{
+			ss << "\n";
+		}
+
+		++it;
+	}
+	ss << "}";
+}
+
+std::string Table::to_json(bool nice_format)
+{
+	std::stringstream json_str;
+
+	json_str << "[";
+
+	for(auto it = m_rows.begin(); it != m_rows.end(); ++it)
+	{
+		row_to_json(json_str, m_layout, *it, nice_format);
+
+		auto it_cpy = it;
+		if( (++it_cpy) != m_rows.end())
+		{
+			json_str << ",";
+		}
+	}
+
+	json_str << "}";
+
+	return json_str.str();
 }
 
 }

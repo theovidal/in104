@@ -79,5 +79,25 @@ void Row::destroy_current_values()
 	m_values.clear();
 }
 
+Row::Row(const Row& row)
+{
+	*this = row;
+}
+
+Row& Row::operator=(const Row& row)
+{
+	this->destroy_current_values();
+	
+	m_values = row.m_values;
+
+	for(size_t i = 0; i < row.m_values.size(); ++i)
+	{
+		if(row.m_values[i].type == DT::TEXT)
+		{
+			m_values[i].sval = new char[1+strlen(row.m_values[i].sval)];
+			strcpy(m_values[i].sval, row.m_values[i].sval);
+		}
+	}
+}
 
 }

@@ -36,6 +36,9 @@ public:
 	friend class Table;
 	Row();
 	Row( const std::vector<RowValue> &values );
+
+	Row(const Row&);
+	Row& operator=(const Row&) ;
 	~Row();
 
 	void set_values(const std::vector<RowValue> &values);

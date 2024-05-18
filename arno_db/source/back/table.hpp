@@ -9,6 +9,7 @@
 #include <list>
 #include <optional>
 #include <utility>
+#include <sstream>
 
 namespace adb
 {
@@ -32,7 +33,7 @@ public:
 	void update( const Condition &cond, const Row &new_row );
 	Table get( const Condition &cond );
 
-	std::string to_json();
+	std::string to_json(bool nice_format = false);
 
 	private:
 	
@@ -47,6 +48,8 @@ public:
 	bool apply_condition(const Row &row, const Condition &cond);
 	
 	bool check_row_layout(const Row &row);
+
+	void row_to_json(std::stringstream &ss, const std::vector<Field>& layout, const Row &row, bool nice_format = false);
 
 	std::vector<Field> m_layout;
 	std::list<Row> m_rows;

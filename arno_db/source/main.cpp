@@ -80,7 +80,10 @@ void print_condition( const adb::Condition &cond )
 int main()
 {
 	adb::Condition cond = adb::CondOR(
-		adb::CondGE("id", adb::CondINT(4)),
+		adb::CondAND(
+			adb::CondGE("id", adb::CondINT(4)),
+			adb::CondL("id", adb::CondINT(7))
+		),
 		adb::CondEQ("username", adb::CondTEXT("arnaud"))
 	);
 
@@ -90,20 +93,28 @@ int main()
 		"arnaud", "louis", "théo", "léonce", "imrane", "maël", "pierre", "paul", "jacques"
 	};
 
-	adb::DB db;
-	db.addTable("users", {
+	// adb::DB db;
+	// db.addTable("users", {
+	// 	adb::Field("id", adb::DT::INT),
+	// 	adb::Field("username", adb::DT::TEXT),
+	// 	adb::Field("passwordHAsh", adb::DT::TEXT)}
+	// );
+
+	adb::Table table {"name", {
 		adb::Field("id", adb::DT::INT),
 		adb::Field("username", adb::DT::TEXT),
 		adb::Field("passwordHAsh", adb::DT::TEXT)}
-	);
+	};
 
 	int current_id = 0;
 	for(const auto &name: names)
 	{
-		adb::Row row_values({adb::ValInt(20), adb::ValText(name), adb::ValText("ajfeuoize")});
+		adb::Row row_values ({adb::ValInt(current_id++), adb::ValText(name), adb::ValText("ajfeuoize")});
+		//db["users"].insert(row_values);
+		table.insert(row_values);
 	}
 
-	std::cout << db["users"].get(cond).to_json();
+	std::cout << table.get(cond).to_json(true) << "\n";
 
 	return 0;
 }
