@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { request } from '@/utils/api.js';
+import { endpoints, request } from '@/utils/api.js';
 import { saveAs } from 'file-saver';
 
 const response = await request(endpoints.presenceReport);

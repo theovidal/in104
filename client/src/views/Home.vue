@@ -11,7 +11,7 @@
 
 import { useAuthStore } from '@/stores/auth.js'
 import Presences from '@/components/Absences.vue'
-import Lectures from './components/Lectures.vue'
+import Lectures from '@/components/Lectures.vue'
 import PresenceReport from '@/components/PresenceReport.vue'
 
 const authStore = useAuthStore()
