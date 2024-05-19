@@ -15,7 +15,7 @@
         {{ authStore.data.firstname }} {{ authStore.data.lastname }}
         <RouterLink
           class="nav-item"
-          @click="authStore.logout()"
+          @click="authStore.logout(); router.push({ name: 'login' })"
           to="/login">Déconnexion</RouterLink>
       </nav>
     </div>
@@ -32,8 +32,9 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAuthStore } from "@/stores/auth.js";
 
 const authStore = useAuthStore()
+const router = useRouter()
 </script>
