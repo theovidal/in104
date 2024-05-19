@@ -27,5 +27,34 @@ module.exports = async function createPresence(req, res) {
             await lectures_fun.updatePresence(payload.id, res.locals.user.id, true);
             return res.status(204).send();
         })
-    } 
+    } else {
+        const pupilId = req.body.userId
+        if (pupilId === undefined) return res.status(400).json({
+            error: "Must include userId to the request"
+        })
+
+        const pupil = await users_fun.getById(pupilId);
+        if (pupil === null) return res.status(400).json({
+            error: "unknown user"
+        })
+
+        const lectureId = req.body.lectureId
+        if (lectureId === undefined) return res.status(400).json({
+            error: "Must include lectureId to the request"
+        })
+
+        const lecture = await lectures_fun.getById(lectureId);
+        if (lecture === null) return res.status(400).json({
+            error: "unknown lecture"
+        })
+
+        // Only the administration should be able to edit the appointment
+        const present = new Date();
+        if (res.locals.user.role === 'professeur' && present < lecture.beginDate && present > lecture.endDate) return res.status(403).json({
+            error: "A teacher cannot modify the appointment after the lecture"
+        })
+
+        await lectures_fun.updatePresence(lecture.id, pupil.id, true);
+        res.status(204).send();
+    }
 }
