@@ -26,7 +26,7 @@ module.exports = async function deletePresence(req, res) {
             })
         }
 
-        await lectures_fun.updatePresence(lecture_id, user.id, true);
+        await lectures_fun.updatePresence(lecture_id, user.id, false);
 
     }else {
         res.status(403).json({
