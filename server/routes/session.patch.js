@@ -1,16 +1,13 @@
 const jwt = require('jsonwebtoken')
 const tokens = require('../core/tokens')
+const dayjs = require('dayjs')
 
 module.exports = function refreshSession(req, res) {
-  const exp = new RegExp('Bearer (.*)')
-  const info = exp.exec(req.headers['authorization']);
-
-  if (info === null) {
-    return res.status(403).json({
-      error: 'invalid token'
+  const token = req.cookies.refreshToken
+  if (token === undefined)
+    return res.status(401).json({
+      error: 'unauthenticated'
     });
-  }
-  const token = info[1];
 
   jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
     console.log(err)
@@ -20,9 +17,12 @@ module.exports = function refreshSession(req, res) {
 
     delete user.iat;
     delete user.exp;
-    const refreshedToken = tokens.generateAccessToken(user.id, user.email, user.role);
-    res.send({
-      accessToken: refreshedToken,
+    const accessToken = tokens.generateAccessToken(user.id, user.email, user.role);
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: true,
+      expires: dayjs().add(process.env.ACCESS_TOKEN_EXPIRATION, 'seconds').toDate()
     });
+    res.status(204).send()
   });
 }

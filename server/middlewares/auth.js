@@ -16,16 +16,12 @@ module.exports = async function authMiddleware(req, res, next) {
   }
   res.locals.authenticated = false;
 
-  const exp = new RegExp('Bearer (.*)')
-  const info = exp.exec(req.headers['authorization']);
+  const token = req.cookies.accessToken;
 
-  if (info === null) {
-    res.status(401).json({
+  if (token === undefined)
+    return res.status(401).json({
       error: 'unauthenticated'
     });
-    return;
-  }
-  const token = info[1];
 
   // Before checking any token, remove the expired ones
   //await tokens.removeExpiredTokens();
