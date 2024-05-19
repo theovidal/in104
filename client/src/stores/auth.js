@@ -37,7 +37,6 @@ export const useAuthStore = defineStore('auth', () => {
     if (response.ok){
       data.value = await response.json();
       authenticated.value = true
-      //localStorage.setItem('token', json.token.token);
       return true
     }
     else{
@@ -51,8 +50,6 @@ export const useAuthStore = defineStore('auth', () => {
     await request(endpoints.session, 'DELETE');
     authenticated.value = false;
     data.value = {};
-
-    //localStorage.removeItem('token');
   }
 
   return { authenticated, data, login, logout, getSession }

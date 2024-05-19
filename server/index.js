@@ -63,6 +63,7 @@ db.sync({force: true}).then(async () => {
     console.log(`✅ Listening on port ${process.env.BACK_PORT}`);
     console.log(`Client requests will be redirected to port ${process.env.FRONT_PORT}`);
   })
-}).catch( () => {
+}).catch( (err) => {
   console.error("❌ Error while creating the database")
+  console.error(err)
 })

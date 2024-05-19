@@ -14,7 +14,6 @@ function request(url, method = 'GET', params = undefined) {
     credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
-      //'Authentication': localStorage.getItem('token')
     },
     body: JSON.stringify(params),
   })
