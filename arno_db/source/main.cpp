@@ -3,63 +3,75 @@
 #include <vector>
 #include "adb.hpp"
 
-void print_condition( adb::Condition cond )
+void print_row_value( const adb::RowValue &value)
+{
+	switch(value.type)
+	{
+		case adb::DT::BOOL:
+			std::cout << value.bval ? "true": "false";
+			break;
+		case adb::DT::INT:
+			std::cout << value.ival;
+			break;
+		case adb::DT::FLOAT:
+			std::cout << value.fval;
+			break;
+		case adb::DT::TEXT:
+			std::cout << value.sval;
+			break;
+		case adb::DT::NIL:
+			std::cout << "null";
+			break;
+		default:
+			throw std::runtime_error("erreure: type DT inconnu");
+	}
+}
+
+void print_condition( const adb::Condition &cond )
 {
 	switch( cond->type )
 	{
 	case adb::ConditionType::AND:
 		std::cout << "(";
-		print_condition(cond->arg1);
+		print_condition(cond->binary_op.arg1);
 		std::cout << ") AND (";
-		print_condition(cond->arg2);
+		print_condition(cond->binary_op.arg2);
 		std::cout << ")";
 		break;
 	case adb::ConditionType::OR:
 		std::cout << "(";
-		print_condition(cond->arg1);
+		print_condition(cond->binary_op.arg1);
 		std::cout << ") OR (";
-		print_condition(cond->arg2);
+		print_condition(cond->binary_op.arg2);
 		std::cout << ")";
 		break;
 	case adb::ConditionType::NOT:
 		std::cout << "NOT(";
-		print_condition(cond->arg1);
+		print_condition(cond->binary_op.arg1);
 		std::cout << ")";
 		break;
 	case adb::ConditionType::EQ:
-		std::cout << "\"" << cond->adb::field << "\" = ";
-		print_condition(cond->arg1);
+		std::cout << "\"" << cond->value_op.field_name << "\" = ";
+		print_condition(cond->value_op.arg);
 		break;
 	case adb::ConditionType::LE:
-		std::cout << "\"" << cond->field << "\" <= ";
-		print_condition(cond->arg1);
+		std::cout << "\"" << cond->value_op.field_name << "\" <= ";
+		print_condition(cond->value_op.arg);
 		break;
 	case adb::ConditionType::L:
-		std::cout << "\"" << cond->field << "\" < ";
-		print_condition(cond->arg1);
+		std::cout << "\"" << cond->value_op.field_name << "\" < ";
+		print_condition(cond->value_op.arg);
 		break;
 	case adb::ConditionType::GE:
-		std::cout << "\"" << cond->field << "\" >= ";
-		print_condition(cond->arg1);
+		std::cout << "\"" << cond->value_op.field_name << "\" >= ";
+		print_condition(cond->value_op.arg);
 		break;
 	case adb::ConditionType::G:
-		std::cout << "\"" << cond->field << "\" > ";
-		print_condition(cond->arg1);
+		std::cout << "\"" << cond->value_op.field_name << "\" > ";
+		print_condition(cond->value_op.arg);
 		break;
 	case adb::ConditionType::DATA:
-		switch(cond->value_type)
-		{
-		case( adb::DT::INT):
-			std::cout << *(int*)cond->value;
-			break;
-		case( adb::DT::TEXT ):
-			std::cout << "\"" << *(std::string*)cond->value << "\"";
-			break;
-		case( adb::DT::NIL ):
-			std::cout << "NIL";
-			break;
-		default: break;
-		}
+		print_row_value(cond->value);
 		break;
 	default: break;
 	}
@@ -71,6 +83,8 @@ int main()
 		adb::CondGE("id", adb::CondINT(4)),
 		adb::CondEQ("username", adb::CondTEXT("arnaud"))
 	);
+
+	print_condition(cond);
 
 	std::vector<std::string> names {
 		"arnaud", "louis", "théo", "léonce", "imrane", "maël", "pierre", "paul", "jacques"
@@ -86,12 +100,10 @@ int main()
 	int current_id = 0;
 	for(const auto &name: names)
 	{
-		adb::ByteStream user_data;
-		user_data << current_id++ << name << "abdc1234";
-		db["user"].insert(user_data);
+		adb::Row row_values({adb::ValInt(20), adb::ValText(name), adb::ValText("ajfeuoize")});
 	}
 
-	std::cout << db["users"].get(cond).JSON();
+	std::cout << db["users"].get(cond).to_json();
 
 	return 0;
 }

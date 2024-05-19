@@ -20,7 +20,7 @@ exports.create = (teacherId, name) => {
 /**
  * Récupère un cours depuis son nom (les noms sont uniques)
  * @param {string} name Le nom du cours récupérable par courses.create(...) ou courses.get*()
- * @returns une promesse qui contient les données du cours ou bien null, en cas d'érreure sequelize, la promesse est rejetée
+ * @returns une promesse qui contient les données du cours ou bien null, en cas d'erreur sequelize, la promesse est rejetée
  */
 exports.getByName = (name) => {
 	return new Promise((resolve, reject) => {
@@ -31,8 +31,8 @@ exports.getByName = (name) => {
 }
 
 /**
- * Récupère un cours depuis son nom (les noms sont uniques)
- * @param {int} id L'identifiant du cours récupérable par courses.create(...) / course.get*()
+ * Récupère un cours depuis son ID (les ID sont uniques)
+ * @param {int} id L'identifiant du cours récupérable par courses.create(...) / courses.get*()
  * @returns une promesse qui contient les données du cours ou bien null, en cas d'érreure sequelize, la promesse est rejetée
  */
 exports.getById = (id) => {
@@ -153,6 +153,22 @@ exports.getAttendantsByName= (courseName) => {
 	return new Promise((resolve, reject) => {
 		db.Users.findAll({
 			include: {model: db.Courses, where: {name: courseName}}
+		}).then( vals => {
+			dataValues = vals.map( value => value.dataValues );
+			resolve(dataValues);
+		}).catch( reject );
+	});
+}
+
+/**
+ * Récupère les séances associés au cours [courseId]
+ * @param {int} courseId 
+ * @returns Promise<Object[]>
+ */
+exports.getCourseLectures = (courseId) => {
+	return new Promise((resolve, reject) => {
+		db.Lectures.findAll({
+			where: {courseId: courseId}
 		}).then( vals => {
 			dataValues = vals.map( value => value.dataValues );
 			resolve(dataValues);

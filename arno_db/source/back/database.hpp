@@ -16,7 +16,6 @@ public:
 
 	Table &operator[](const std::string &name);
 	
-
 private:
 	std::map< std::string, Table > m_tables;
 };
