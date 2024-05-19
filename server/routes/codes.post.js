@@ -4,8 +4,9 @@ const { Courses } = require('../../db/models')
 const { insert_lecture, lectures } = require('../core/lectures')
 const courses_fun = require('../controllers/courses');
 const lectures_fun = require('../controllers/lectures');
+const jwt = require('jsonwebtoken')
 
-module.exports = function createCode(req, res) {
+module.exports = async function createCode(req, res) {
 
     //fonction de génération aléatoire de chaîne de caractère, pas optimal mais je le laisse en argument pour la soutenance
 
@@ -23,55 +24,50 @@ module.exports = function createCode(req, res) {
 
     //génération et envoie du code, si l'utilisateur est un professeur
 
-    if (res.locals.user.role === 'professeur') {
+    if (res.locals.user.role !== 'professeur') return res.status(403).json({
+        error: 'Acces interdit'
+    })
 
-        //Verifications
+    //Verifications
 
-        const lecture_id = req.body.lectureId
-        if (lecture_id === undefined) {
-            res.status(400).json({
-                error: 'Séance non précisée'
-            })
-        }
-
-        const lecture = lectures_fun.getById(lecture_id);
-        if (lecture === null) {
-            res.status(400).json({
-                error: 'Séance inexistante'
-            })
-        }
-
-        const course = courses_fun.getById(lecture.courseId);
-
-        if (course.teacherId != res.locals.user.role) {
-            res.status(403).json({
-                error: 'Accès interdit'
-            })
-        }
-
-        const date_requete = new Date();
-        const date_debut = lecture.date;
-        const date_fin = lecture.date;
-        date_fin.setTime(date_fin.getTime() + 3_600_000);
-        //ce sera beginDate et endDate dès que Arnaud l'aura fait
-
-        if (date_debut > date_requete || date_fin < date_requete) {
-            res.status(400).json({
-                error: 'Horaire incompatible'
-            })
-        }
-
-        //on passe par le module crypto de node, génère un code de 60 caractères
-        const crypto = require("crypto");
-        const code = crypto.randomBytes(30).toString('hex');
-        insert_lecture(code, lecture_id);
-        res.json({
-            code: code
-        })
-
-    } else {
-        res.status(403).json({
-            error: 'Acces interdit'
+    const lecture_id = req.body.lectureId
+    if (lecture_id === undefined) {
+        return res.status(400).json({
+            error: 'Séance non précisée'
         })
     }
+
+    const lecture = await lectures_fun.getById(lecture_id);
+    if (lecture === null) {
+        return res.status(400).json({
+            error: 'Séance inexistante'
+        })
+    }
+    console.log(lecture);
+
+    const course = await courses_fun.getById(lecture.courseId);
+
+    if (course.teacherId != res.locals.user.id) {
+        return res.status(403).json({
+            error: 'Accès interdit'
+        })
+    }
+
+    const attendants = await courses_fun.getAttendantsById(course.id);
+    console.log(attendants);
+
+    const date_requete = new Date();
+    if (lecture.beginDate > date_requete || lecture.endDate < date_requete) {
+        return res.status(400).json({
+            error: 'Horaire incompatible'
+        })
+    }
+
+    const code = jwt.sign({
+        lectureId: lecture.id,
+    }, process.env.CODES_SECRET, { expiresIn: `${process.env.CODES_EXPIRATION}s` });
+
+    res.json({
+        code
+    })
 }
