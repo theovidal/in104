@@ -62,9 +62,16 @@ module.exports = function createPresence(req, res) {
         lectures_fun.updatePresence(lecture_id, user.id, true);
 
     } else {
+<<<<<<< HEAD
     res.status(403).json({
         error: 'Erreur dans la génération du code'
     })
     }
 
+=======
+        res.status(403).json({
+            error: 'Erreur dans la génération du code'
+        })
+    }
+>>>>>>> 86ab7369644970fb0a86f5c872d6c3a74d61b15c
 }
