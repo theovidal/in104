@@ -50,8 +50,7 @@ module.exports = async function createPresence(req, res) {
         //ce sera beginDate et endDate dès que Arnaud l'aura fait
 
         const liste_eleves = await courses_fun.getAttendantsById(course.id);
-        console.log(liste_eleves);
-        if (liste_eleves(user) === undefined) {
+        if (liste_eleves.findIndex(eleve => eleve.id === user.id) == -1) {
             return res.status(400).json({
                 error: 'Eleve et cours incompatibles'
             })
