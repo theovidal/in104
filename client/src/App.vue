@@ -2,15 +2,17 @@
   <header>
     <div class="wrapper">
       <nav v-if="authStore.authenticated">
-        <img alt="ENSTA logo" class="logo" src="/public/logo_ensta_paris.jpg" width="125" height="125" />
-        <RouterLink to="/">Accueil</RouterLink>
+        <img alt="ENSTA logo" class="logo" src="/logo_ensta_paris_transparent.png" width="20" />
+        <RouterLink class="nav-item" to="/">Accueil</RouterLink>
         <RouterLink
-            v-if="authStore.data.role === 'professeur'"
-            to="/generate">Générer un code</RouterLink>
+          class="nav-item"
+          v-if="authStore.data.role === 'eleve'"
+          to="/scan">Scanner un code</RouterLink>
         {{ authStore.data.firstname }} {{ authStore.data.lastname }}
         <RouterLink
-          @click="authStore.logout()"
-          to="/login">Se déconnecter</RouterLink>
+          class="nav-item"
+          @click="authStore.logout(); router.push({ name: 'login' })"
+          to="/login">Déconnexion</RouterLink>
       </nav>
     </div>
   </header>
@@ -26,8 +28,9 @@
 </template>
 
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAuthStore } from "@/stores/auth.js";
 
 const authStore = useAuthStore()
+const router = useRouter()
 </script>
