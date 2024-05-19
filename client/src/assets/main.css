@@ -6,12 +6,15 @@ html {
 
 
 nav{
+  height: fit-content;
   width: 100%;
   display: flex;
   margin-left: auto;
   margin-right: auto;
   padding-left: auto;
   padding-right: auto;
+  padding-top: 0;
+  padding-bottom: 0;
   position: sticky;
   top: 0;
 
@@ -23,20 +26,22 @@ nav{
   vertical-align: baseline;
 }
 
-.navigation-links{
-  list-style: none;
+.logo{
+  margin: 15px;
   display: inline-block;
 }
 
-.navigation-item{
+.nav-item{
   display: inline-block;
   padding: 10px 15px;
   text-decoration: none !important;
   border: 10px !important;
   border-color: crimson !important;
+  color: #142654;
+  font-size: 10px;
 }
 
-.logo{
-  margin: 15px;
-  display: inline-block;
+.nav-item:hover{
+  background-color:#142654;
+  color:#E6E6E6;
 }

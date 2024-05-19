@@ -117,7 +117,7 @@ exports.getPresences = (lectureId) => {
 exports.getById = (lectureId) => {
 	return new Promise((resolve, reject) => {
 		db.Lectures.findByPk(lectureId)
-			.then( value => resolve(value.dataValues))
+			.then( value => resolve(value === null ? null : value.dataValues))
 			.catch( reject );
 	});
 }

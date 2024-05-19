@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from "@/views/Login.vue";
+import Scan from '@/views/Scan.vue';
 import { useAuthStore } from '@/stores/auth.js'
 
 const router = createRouter({
@@ -17,12 +18,20 @@ const router = createRouter({
       component: Login
     },
     {
-      path: '/generate',
+      path: '/generate/:id',
       name: 'generate',
+      meta: {
+        roles: ['professeur']
+      },
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/Generate.vue')
+    },
+    {
+      path: '/scan',
+      name: 'scan',
+      component: Scan
     }
   ]
 })
@@ -30,8 +39,10 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
-  if (to.name === 'login' || await authStore.getSession()) next()
-  else return { name: 'login' }
+  const isLogged = await authStore.getSession()
+  if (to.name !== 'login' && !isLogged) next({ name: 'login', query: { redirect: to.path }})
+  else if (to.meta.roles !== undefined && !to.meta.roles.includes(authStore.data.role)) next('/')
+  else next()
 })
 
 export default router

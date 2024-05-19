@@ -168,10 +168,26 @@ exports.getAttendantsByName= (courseName) => {
 exports.getCourseLectures = (courseId) => {
 	return new Promise((resolve, reject) => {
 		db.Lectures.findAll({
-			where: {courseId: courseId}
+			where: {courseId}
 		}).then( vals => {
-			dataValues = vals.map( value => value.dataValues );
+			const dataValues = vals.map( value => value.dataValues );
 			resolve(dataValues);
 		}).catch( reject );
 	});
+}
+
+/**
+ * Récupère les cours associés au professeur [teacherId]
+ * @param {int} teacherId
+ * @returns Promise<Object[]>
+ */
+exports.getByTeacherId = (teacherId) => {
+	return new Promise((resolve, reject) => {
+		db.Courses.findAll({
+			where: {teacherId}
+		}).then(vals => {
+			const dataValues = vals.map( value => value.dataValues );
+			resolve(dataValues);
+		}).catch( reject );
+	})
 }

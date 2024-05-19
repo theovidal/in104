@@ -2,7 +2,7 @@
 
 This folder contains the Back-End of our application, which consists of a REST API.
 
-Every API request must contain the user token in the `Authentication` header, except for the login route (obviously).
+The authentication works using JWTs stored in cookies : you just have to create your session and/or refresh it with the routes below, and pass the cookies along your requests (which is handled automatically using popular API software such as Insomnia).
 
 ## Routes
 
@@ -12,6 +12,7 @@ Every API request must contain the user token in the `Authentication` header, ex
 - `POST` session : action of logging in using email and password ; include in the body :
   - email
   - password
+- `PATCH` session : refresh the session using the refresh token
 - `DELETE` session : action of logging out (i.e. destroying the token)
 
 ### Lectures
