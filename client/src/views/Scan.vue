@@ -69,7 +69,9 @@ function onDetect(data) {
 }
 
 async function validateCode() {
-  const response = await request(`${endpoints.scanCode}?code=${result.value}`);
+  const response = await request(endpoints.presences, 'POST', {
+    code: result.value
+  });
   if (response.ok) {
     alert('Vous avez bien été noté présent au cours !')
   } else {

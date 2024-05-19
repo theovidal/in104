@@ -18,11 +18,12 @@ import { endpoints, request } from '@/utils/api.js'
 import { useRoute, useRouter } from 'vue-router'
 
 // CONSTANTS
-const displaySeconds = 1;
+
+// Duration of one code (in seconds)
+const displaySeconds = 5;
 
 // REFS
 const generation = ref(false);
-const course = ref('');
 const code = ref('');
 const interval = ref(0);
 
@@ -43,8 +44,8 @@ function onSwitchGeneration() {
 }
 
 async function refreshCode() {
-  const response = await request(endpoints.createCode, 'POST', {
-    cours: route.params.id
+  const response = await request(endpoints.codes, 'POST', {
+    lectureId: route.params.id
   });
   if (!response.ok) {
     alert("L'identifiant du cours est incorrect");
@@ -54,12 +55,8 @@ async function refreshCode() {
   const data = await response.json();
 
   const canvas = document.getElementById("qrcode");
-  QRCode.toCanvas(canvas, `${window.location.origin}/scan?code=${data.code}`);
+  QRCode.toCanvas(canvas, data.code);
   code.value = data.code;
-}
-
-async function deleteCode() {
-  await request(endpoints.codes, 'DELETE')
 }
 </script>
 
