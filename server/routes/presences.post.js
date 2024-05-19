@@ -36,7 +36,6 @@ module.exports = function createPresence(req, res) {
 
         const course = courses_fun.getById(lecture.courseId);
 
-        //verif que user et course sont liés, dans attendance
 
         const date_requete = new Date();
         const date_debut = lecture.date;
@@ -50,7 +49,6 @@ module.exports = function createPresence(req, res) {
         }
         //ce sera beginDate et endDate dès que Arnaud l'aura fait
 
-        //Verifier que le code est avec le bon cours -> bonne heure, (bon prof ?)
         const liste_eleves = courses_fun.getAttendantsById(course.id);
         if (liste_eleves(user) === undefined) {
             res.status(400).json({
@@ -67,6 +65,6 @@ module.exports = function createPresence(req, res) {
     res.status(403).json({
         error: 'Erreur dans la génération du code'
     })
-
+    }
 
 }
