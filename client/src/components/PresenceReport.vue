@@ -30,7 +30,7 @@
 import { endpoints, request } from '@/utils/api.js';
 import { saveAs } from 'file-saver';
 
-const response = await request(endpoints.presenceReport);
+const response = await request(endpoints.presences);
 const presences = await response.json();
 
 function exportPresences() {

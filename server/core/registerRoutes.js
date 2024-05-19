@@ -16,7 +16,7 @@ module.exports = function registerRoutes(app) {
         const method = match[2];
 
         try {
-          app[method](`/${path}`, module.default)
+          app[method](`/api/${path}`, module.default)
         } catch {
           throw new Error(`unsupported method "${method}" for route: ${path}. Try renaming the file in the "routes" folder.`);
         }
