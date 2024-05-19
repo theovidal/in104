@@ -5,26 +5,28 @@ const lectures_fun = require('../controllers/lectures');
 const users_fun = require('../controllers/users');
 const courses_fun = require('../controllers/courses');
 
-module.exports = function deletePresence(req, res) {
+module.exports = async function deletePresence(req, res) {
     if (res.locals.user.role === "professeur") {
         
-        //Verif que user in lecture du prof, à la bonne heure, et présent
-        const eleve = users_fun.getById(req.query.eleveId);
-        const professeur = users_fun.getByEmail(res.locals.users.email);
-        const lecture = lectures_fun.getById(req.query.lectureId);
-        const course = courses_fun.getById(lecture.courseId);
+        //Verif que user in lecture du prof et présent
+        const eleve = await users_fun.getById(req.body.eleveId);
+        const professeur = await users_fun.getByEmail(res.locals.users.email);
+        const lecture = await lectures_fun.getById(req.body.lectureId);
+        const course = await courses_fun.getById(lecture.courseId);
 
         if (course.teacherId != professeur.id) {
-            res.status(403).json({
+            return res.status(403).json({
                 error: 'Acces interdit'
             })
         }
         
-        if (lectures_fun.isUserPresent(lecture.id, eleve.id) != true) {
-            res.status(400).json({
+        if (!(lectures_fun.isUserPresent(lecture.id, eleve.id))) {
+            return res.status(400).json({
                 error: 'Opération impossible'
             })
         }
+
+        await lectures_fun.updatePresence(lecture_id, user.id, true);
 
     }else {
         res.status(403).json({
