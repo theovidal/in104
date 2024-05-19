@@ -17,18 +17,18 @@ module.exports = function deletePresence(req, res) {
         if (course.teacherId != professeur.id) {
             res.status(403).json({
                 error: 'Acces interdit'
+            })
         }
         
         if (lectures_fun.isUserPresent(lecture.id, eleve.id) != true) {
             res.status(400).json({
                 error: 'Opération impossible'
+            })
         }
-
-
-
 
     }else {
         res.status(403).json({
             error: 'Erreur dans la génération du code'
         })
+    }
 }

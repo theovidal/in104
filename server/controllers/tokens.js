@@ -1,22 +1,25 @@
 const db = require("../../db/models");
 const {Op} = require("sequelize");
-const crypto = require("crypto")
+const jwt = require('jsonwebtoken')
 
-const generateToken = (userId) => {
-	return crypto.randomBytes(30).toString("hex") + (Date.now().toString()) + crypto.createHmac("md5", "k8bb;àçéjirIHGYé_7").update(String(userId)).digest("hex")
-}
+const generateToken = (id, email, role) => {
+	return jwt.sign({
+		id, email, role,
+	}, process.env.TOKEN_SECRET, { expiresIn: `${process.env.TOKEN_EXPIRATION}s` });}
 
 /**
  * créer un jeton d'identification pour userId qui expire le expireAt
  * 
- * @param {*} userId entier renvoyé par des fonctions comme "user.getByEmail"
- * @param {*} token une chaine de caractère quelconque
- * @param {*} expireAt une date sous format standard ISO, par exemple: (new Date()).toISOString()
+ * @param {*} id entier renvoyé par des fonctions comme "user.getByEmail"
+ * @param {*} email l'adresse email de l'utilisateur
+ * @param {*} role le rôle de l'utilisateur (eleve | professeur | admin)
  */
-exports.create = (userId, expireAt) => {
+exports.create = (id, email, role) => {
 	return new Promise((resolve, reject) => {
 		const token = generateToken();
-		db.Tokens.create({userId, token, expireAt})
+		const expiration = new Date();
+		expiration.setSeconds(expiration.getSeconds() + parseInt(process.env.TOKEN_EXPIRATION));
+		db.Tokens.create({userId, token, expiration})
 			.then( token => resolve(token.dataValues))
 			.catch( err => reject(err) );
 	});
