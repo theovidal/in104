@@ -11,9 +11,13 @@ module.exports = function refreshSession(req, res) {
 
   jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
     console.log(err)
-    if (err) return res.sendStatus(403).json({
+    if (err) {
+      res.clearCookie('accessToken');
+      res.clearCookie('refreshToken')
+      return res.sendStatus(403).json({
         error: 'invalid token'
       })
+    }
 
     delete user.iat;
     delete user.exp;

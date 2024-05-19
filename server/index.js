@@ -27,10 +27,28 @@ app.use(authMiddleware);
 const logger = require('./middlewares/logger');
 app.use(logger(process.env.LOGS));
 
-
 // Helper to register every route located in the /routes directory
 const registerRoutes = require('./core/registerRoutes');
 registerRoutes(app);
+
+// Strategies to manage the client :
+// - proxy to the Vite server if in development ;
+// - serve static files of in production.
+const proxy = require('express-http-proxy');
+const notApiRegex = /^((?!api).)*$/
+
+if (process.env.NODE_ENV !== 'production') {
+  app.all(/.*/, function(req, res, next) {
+    if (req.url.startsWith('/api')) next()
+    else proxy(`http://localhost:${process.env.FRONT_PORT}`)(req, res, next);
+  })
+} else {
+  app.all(notApiRegex, function (req, res) {
+    res.sendFile(process.env.FRONT_BUILD_PATH + '/index.html')
+  })
+  app.use(express.static(process.env.FRONT_BUILD_PATH))
+}
+
 
 // Error handling middleware, to return formatted errors to the user
 const errorHandler = require('./middlewares/errors');
@@ -41,8 +59,9 @@ const db = require("../db");
 // Initialize the database and start the server
 db.sync({force: true}).then(async () => {
   await seedDatabase()
-  app.listen(process.env.PORT, () => {
-    console.log(`✅ Listening on port ${process.env.PORT}`);
+  app.listen(process.env.BACK_PORT, () => {
+    console.log(`✅ Listening on port ${process.env.BACK_PORT}`);
+    console.log(`Client requests will be redirected to port ${process.env.FRONT_PORT}`);
   })
 }).catch( () => {
   console.error("❌ Error while creating the database")

@@ -22,11 +22,13 @@ module.exports = async function createSession(req, res) {
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         secure: true,
+        sameSite: "strict",
         expires: dayjs().add(process.env.ACCESS_TOKEN_EXPIRATION, 'seconds').toDate()
       });
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: true,
+        sameSite: "strict",
         expires: dayjs().add(process.env.REFRESH_TOKEN_EXPIRATION, 'days').toDate()
       });
       res.status(201).json({
