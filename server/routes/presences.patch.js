@@ -1,6 +1,7 @@
 const lectures_fun = require('../controllers/lectures');
 const users_fun = require('../controllers/users');
 const jwt = require('jsonwebtoken');
+const courses_fun = require('../controllers/courses')
 
 // Mark a pupil present if :
 // - they scan a code
@@ -39,15 +40,18 @@ module.exports = async function createPresence(req, res) {
         if (lecture === null) return res.status(400).json({
             error: "unknown lecture"
         })
-        if (lecture.teacherId !== res.locals.user.id) res.status(403).json({
-            error: "Accès interdit"
-        })
+        if (res.locals.user.role === 'professeur') {
+            const course = await courses_fun.getById(lecture.courseId);
 
-        // Only the administration should be able to edit the appointment before or after the lecture
-        const now = new Date();
-        if (res.locals.user.role === 'professeur' && now < lecture.beginDate && now > lecture.endDate) return res.status(403).json({
-            error: "A teacher cannot modify the appointment after the lecture"
-        })
+            if (course.teacherId !== res.locals.user.id) return res.status(403).json({
+                error: "Accès interdit : vous n'êtes pas le professeur chargé de ce cours"
+            })
+            // Only the administration should be able to edit the appointment before or after the lecture
+            const now = new Date();
+            if (now < lecture.beginDate && now > lecture.endDate) return res.status(403).json({
+                error: "Vous ne pouvez pas modifier l'appel hors de l'horaire du cours"
+            })
+        }
 
         const present = req.body.present
         if (typeof(present) !== 'boolean') return res.status(400).json({
