@@ -33,12 +33,12 @@ module.exports = async function createPresence(req, res) {
     } else {
         const lectureId = req.body.lectureId
         if (lectureId === undefined) return res.status(400).json({
-            error: "Must include lectureId to the request"
+            error: "lectureId doit être inclue dans la requête"
         })
 
         const lecture = await lectures_fun.getById(lectureId);
         if (lecture === null) return res.status(400).json({
-            error: "unknown lecture"
+            error: "séance (lecture) inconnue"
         })
         if (res.locals.user.role === 'professeur') {
             const course = await courses_fun.getById(lecture.courseId);
@@ -56,17 +56,17 @@ module.exports = async function createPresence(req, res) {
 
         const present = req.body.present
         if (typeof (present) !== 'boolean') return res.status(400).json({
-            error: '"present" must be a boolean'
+            error: '"present" doit être un booléen'
         })
 
         const pupilId = req.body.userId
         if (pupilId === undefined) return res.status(400).json({
-            error: "Must include userId to the request"
+            error: "userId doit être dans la requête"
         })
 
         const pupil = await users_fun.getById(pupilId);
         if (pupil === null) return res.status(400).json({
-            error: "unknown user"
+            error: "Utilisateur inconnu"
         })
 
         await lectures_fun.updatePresence(lecture.id, pupil.id, present);

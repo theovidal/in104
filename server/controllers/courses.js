@@ -2,9 +2,9 @@ const db = require("../../db/models");
 
 /**
  * 
- * @param {int} teacherId l'identifiant du professeur, est renvoyé par users.get* ou bien users.create(...)
- * @param {string} name Le nom du cours
- * @returns une promesse qui contient les données JSON du cours
+ * @param {int} teacherId the professor ID, returned by users.get* or users.create(...)
+ * @param {string} name Course name
+ * @returns A promise which contains the course's JSON data
  */
 exports.create = (teacherId, name) => {
 	return new Promise((resolve, reject) => {
@@ -18,9 +18,9 @@ exports.create = (teacherId, name) => {
 }
 
 /**
- * Récupère un cours depuis son nom (les noms sont uniques)
- * @param {string} name Le nom du cours récupérable par courses.create(...) ou courses.get*()
- * @returns une promesse qui contient les données du cours ou bien null, en cas d'erreur sequelize, la promesse est rejetée
+ * Get a course by its name (names are unique)
+ * @param {string} name Course name, can be recovered with courses.create(...) or courses.get*()
+ * @returns a promise which contains the course's data, rejected if there is a sequelize error
  */
 exports.getByName = (name) => {
 	return new Promise((resolve, reject) => {
@@ -31,9 +31,9 @@ exports.getByName = (name) => {
 }
 
 /**
- * Récupère un cours depuis son ID (les ID sont uniques)
- * @param {int} id L'identifiant du cours récupérable par courses.create(...) / courses.get*()
- * @returns une promesse qui contient les données du cours ou bien null, en cas d'érreure sequelize, la promesse est rejetée
+ * Get a course by its ID (IDs are unique)
+ * @param {int} id Course ID, can be recovered with courses.create(...) or courses.get*()
+ * @returns a promise which contains the course's data, rejected if there is a sequelize error
  */
 exports.getById = (id) => {
 	return new Promise((resolve, reject) => {
@@ -44,9 +44,9 @@ exports.getById = (id) => {
 }
 
 /**
- * supprime le cours associé à [courseId]
+ * Deletes the courses associated to courseId
  * @param {int} courseId 
- * @returns une promesse qui se résout en cas de succès et se rejète en cas d'érreure
+ * @returns a promise
  */
 exports.removeById = (courseId) => {
 	return new Promise((resolve, reject) => {
@@ -55,9 +55,9 @@ exports.removeById = (courseId) => {
 }
 
 /**
- * Supprime le cours associé à name	
+ * Deletes the course associated to courseName	
  * @param {string} courseName 
- * @returns une promesse qui se résout en cas de succès et se rejète en cas d'érreure
+ * @returns a promise
  */
 exports.removeByName = (courseName) => {
 	return new Promise((resolve, reject) => {
@@ -66,9 +66,9 @@ exports.removeByName = (courseName) => {
 }
 
 /**
- * met à jour les données du cours associé à [id],
+ * Updates the courses associated to courseId
  * @param {int} courseId  
- * @param {{name, teacherId}} newCourse si un des champs est égal à [undefined] alors sa valeur n'est pas mise à jour
+ * @param {{name, teacherId}} newCourse If one of the fields is equal to undefined, then there is no update
  */
 exports.updateById = (courseId, newCourse) => {
 	newCourse = Object.fromEntries(Object.entries(newCourse).filter(([key, val]) => {
@@ -89,9 +89,9 @@ exports.updateById = (courseId, newCourse) => {
 }
 
 /**
- * met à jour les données du cours associé à [courseName],
+ * Updates the courses associated to courseName
  * @param {string} courseName  
- * @param {{name, teacherId}} newCourse si un des champs est égal à [undefined] alors sa valeur n'est pas mise à jour
+ * @param {{name, teacherId}} newCourse If one of the fields is equal to undefined, then there is no update
  */
 exports.updateByName = (courseName, newCourse) => {
 	newCourse = Object.fromEntries(Object.entries(newCourse).filter(([key, val]) => {
@@ -112,10 +112,10 @@ exports.updateByName = (courseName, newCourse) => {
 }
 
 /**
- * Ajoute un élève [attendantId] au cours [courseId]
+ * Adds the pupil with Id attendantId to the course with Id courseId
  * @param {int} courseId 
  * @param {int} attendantId 
- * @returns promesse qui renvoie les données JSON de l'association créer, ou est rejetée en cas d'érreure sequelize
+ * @returns a promise which returns the JSON data of the association made
  */
 exports.addAttendantById = (courseId, attendantId) => {
 	return new Promise((resolve, reject) => {
@@ -129,9 +129,9 @@ exports.addAttendantById = (courseId, attendantId) => {
 }
 
 /**
- * récupère les élèves associés au cours [courseId]
- * @param {int} courseId identifiant du cours (renvoyé par courses.get*())
- * @returns Promise<[]> une liste avec des données d'utilisateurs
+ * Gets the pupils associated to course with id courseId
+ * @param {int} courseId 
+ * @returns Promise<[]> an array containing user data
  */
 exports.getAttendantsById = (courseId) => {
 	return new Promise((resolve, reject) => {
@@ -145,9 +145,9 @@ exports.getAttendantsById = (courseId) => {
 }
 
 /**
- * récupère les élèves associés au cours [courseName]
- * @param {string} courseName identifiant du cours (renvoyé par courses.get*())
- * @returns Promise<[]> une liste avec des données d'utilisateurs
+ * Gets the pupils associated to course with name courseName
+ * @param {string} courseName
+ * @returns Promise<[]> an array containing user data
  */
 exports.getAttendantsByName= (courseName) => {
 	return new Promise((resolve, reject) => {
@@ -161,7 +161,7 @@ exports.getAttendantsByName= (courseName) => {
 }
 
 /**
- * Récupère les séances associés au cours [courseId]
+ * Gets the lectures associated to course with id courseId
  * @param {int} courseId 
  * @returns Promise<Object[]>
  */
@@ -177,7 +177,7 @@ exports.getCourseLectures = (courseId) => {
 }
 
 /**
- * Récupère les cours associés au professeur [teacherId]
+ * Gets the lectures associated to teacher with Id teacherId
  * @param {int} teacherId
  * @returns Promise<Object[]>
  */

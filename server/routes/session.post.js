@@ -40,7 +40,7 @@ module.exports = async function createSession(req, res) {
     } catch (err) {
       console.log(err)
       res.status(403).json({
-        error: 'invalid email and/or password'
+        error: 'Mot de passe ou email invalide'
       })
     }
   }

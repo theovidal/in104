@@ -8,7 +8,7 @@ module.exports = function refreshSession(req, res) {
   const token = req.signedCookies.refreshToken
   if (token === undefined)
     return res.status(401).json({
-      error: 'unauthenticated'
+      error: 'Non authentifié'
     });
 
   jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
@@ -17,7 +17,7 @@ module.exports = function refreshSession(req, res) {
       res.clearCookie('accessToken');
       res.clearCookie('refreshToken')
       return res.sendStatus(403).json({
-        error: 'invalid token'
+        error: 'Token invalide'
       })
     }
 

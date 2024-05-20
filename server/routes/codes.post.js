@@ -2,7 +2,7 @@ const courses_fun = require('../controllers/courses');
 const lectures_fun = require('../controllers/lectures');
 const jwt = require('jsonwebtoken')
 
-//crée le code sous-jacent au qr code généré lorsqu'un professeur (et non pas un élève) se connecte
+//Creates a code, used by the professor to give a QR code which is then scanned by pupils
 module.exports = async function createCode(req, res) {
     if (res.locals.user.role !== 'professeur') return res.status(403).json({
         error: 'Acces interdit'
@@ -43,6 +43,8 @@ module.exports = async function createCode(req, res) {
         })
     }
 
+    //Code creation, using a JWT
+    
     const code = jwt.sign({
         id: lecture.id,
         ppl: attendants.map(user => user.id)

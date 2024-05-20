@@ -8,7 +8,6 @@ exports.getPresences = async(lectureId = undefined, userId = undefined, isPresen
    join courses on lectures.courseId = courses.id`;
 
   let replacements = {};
-  // do we need to add a "and" after the query?
   let need_connection = false;
 
   if( lectureId !== undefined ) {

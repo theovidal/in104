@@ -3,15 +3,15 @@ const courses = require("./courses");
 
 /**
  * 
- * @param {Date} beginDatetime Une date (ex: new Date())
- * @param {float} durationInMinutes La durée du cour (ex: 120 pour 2h)
- * @param {int} courseId l'identifiant du cours
+ * @param {Date} beginDatetime A date (ex: new Date())
+ * @param {float} durationInMinutes Lecture duration (ex: 120 pour 2h)
+ * @param {int} courseId Course Id
  * @returns Promise<Objet>
  */
 exports.create = (beginDatetime, durationInMinutes, courseId) => {
 	return new Promise( async(resolve, reject) => {
 		try {
-			// création de la "lecture" (cours, date)
+			// lecture creation (course, date)
 			const endDatetime = new Date(beginDatetime.getTime() + 60000 * durationInMinutes);
 
 			const newLecture = await db.Lectures.create({
@@ -20,10 +20,10 @@ exports.create = (beginDatetime, durationInMinutes, courseId) => {
 				courseId: courseId
 			})
 
-			// récupération des élèves
+			// pupils recovering
 			const attendants = await courses.getAttendantsById(courseId);
 
-			// ajout de chaque élève à la table des présences
+			// each pupil is added to the presences table
 			for(let attendant of attendants) {
 				await db.Presences.create({
 					userId: attendant.id,
@@ -32,7 +32,7 @@ exports.create = (beginDatetime, durationInMinutes, courseId) => {
 				});
 			}
 
-			// on renvoie l'objet "presence"
+			// presence is returned
 			resolve(newLecture.dataValues);
 		} catch (error) {
 			reject(error)
@@ -41,7 +41,7 @@ exports.create = (beginDatetime, durationInMinutes, courseId) => {
 }
 
 /**
- * Met à jour la présence d'un utilisateur à un cour
+ * Updates a pupil's presence in a lecture
  * @param {int} lectureId
  * @param {int} userId
  * @param {boolean} isPresent 
@@ -94,7 +94,7 @@ exports.isUserPresent = (lectureId, userId) => {
 }
 
 /**
- * Récupère la liste des utilisateurs présents à la séance [lectureId]
+ * Gets the presence list of the users present to the lecture with id lectureId
  * @param {int} lectureId 
  * @returns Promise<Object[]>
  */
@@ -110,7 +110,7 @@ exports.getPresences = (lectureId) => {
 }
 
 /**
- * Rien à dire...
+ * Self explanatory
  * @param {int} lectureId 
  * @returns {Promise<>}
  */
