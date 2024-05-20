@@ -23,7 +23,8 @@
       <tbody>
       <tr
         v-for="(presence, index) in presences"
-        :key="`${presence.userId} ${presence.lectureId}`">
+        :key="`${presence.userId} ${presence.lectureId}`"
+        :class="{ 'present': presence.isPresent, 'absent': !presence.isPresent }">
         <th>{{ presence.userId }}</th>
         <th>{{ presence.userId }}</th>
         <th>{{ presence.isPresent ? 'Oui' : 'Non'}}</th>
@@ -103,7 +104,8 @@ async function switchPresence(index) {
     present: !presence.isPresent
   })
   if (!response.ok) {
-    alert("Vous n'êtes plus autorisé à effectuer cette action (hors de l'heure du cours)");
+    const body = await response.json()
+    alert(body.error);
     return
   }
   presences.value[index].present = !presence.isPresent;
