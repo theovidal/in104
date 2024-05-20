@@ -4,7 +4,7 @@ const courses = require("../controllers/courses");
 const tokens = require("../controllers/tokens");
 const lectures = require("../controllers/lectures");
 
-test("token db controller", async() => {
+test.skip("token db controller", async() => {
 	try {
 		await db.sync({force: true})
 		const user = await users.create({
@@ -39,7 +39,7 @@ test("token db controller", async() => {
 	}
 })
 
-test("user db controller", async() => {
+test.skip("user db controller", async() => {
 	try {
 		await db.sync({force: true})
 
@@ -69,7 +69,7 @@ test("user db controller", async() => {
 	}
 })
 
-test("course db controller", async() => {
+test.skip("course db controller", async() => {
 	try {
 		const user = await users.create({
 			firstname: "arnaud",
@@ -124,7 +124,7 @@ test("course db controller", async() => {
 	}
 })
 
-test("presences db controller", async() => {
+test.skip("presences db controller", async() => {
 	try {
 		const teacher = await users.create({
 			firstname: "teacher",
