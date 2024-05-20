@@ -5,7 +5,6 @@
       <h1>Entrez vos identifiants</h1>
     </div>
     <!-- formulaire de connexion -->
-    <!-- TODO : Validation UI-->
     <div>
       <div class="form_login">
         <input v-model="email" type="email" id="email" name="email" placeholder="Adresse email" required="required"/>
