@@ -1,0 +1,233 @@
+---
+openapi: 3.0.0
+info:
+  title: ENSTA Sign
+  description: The API for our IN104 project
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/TheoVidal/ENSTASign/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: http://localhost:8080/api
+  description: Your local test
+paths:
+  /session:
+    get:
+      tags:
+      - User
+      description: get user's session (if logged in)
+      operationId: getSession
+      responses:
+        "200":
+          description: All the devices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: uri
+                  example: http://10.0.0.225:8080
+    post:
+      tags:
+      - User
+      description: login using user's credentials
+      operationId: createSession
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/session_body'
+      responses:
+        "201":
+          description: the session was created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      tags:
+      - User
+      description: "remove the session, i.e. clear the cookies"
+      operationId: clearSession
+      responses:
+        "204":
+          description: the session was removed
+    patch:
+      tags:
+      - User
+      description: refresh the access token using a refresh token
+      operationId: refreshSession
+      responses:
+        "204":
+          description: the session was refreshed
+  /presences:
+    get:
+      tags:
+      - Presences
+      description: get all the presences following certain criterias
+      parameters:
+      - name: present
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      - name: lectureId
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      - name: userId
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      responses:
+        "200":
+          description: lectures have been fetched correctly
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Presence'
+    patch:
+      tags:
+      - Presences
+      description: Mark a pupil as present or absent for a given lecture
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/presences_body'
+      responses:
+        "204":
+          description: the pupil was marked as present or absent for this lecture
+        "403":
+          description: the person doesn't have the right to edit the register (pupil or teacher outside of lecture's hours)
+        "400":
+          description: a parameter is malformed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+  /codes:
+    post:
+      tags:
+      - Presences
+      description: create a code for a lecture ; must be the professor of this course
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/codes_body'
+      responses:
+        "201":
+          description: the code was created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201'
+        "403":
+          description: the teacher doesn't have the right to create a code (out of the lecture or not their course)
+  /courses:
+    get:
+      tags:
+      - Courses
+      description: "for a teacher, get all its courses and lectures"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+        firstname:
+          type: string
+        lastname:
+          type: string
+        email:
+          type: string
+    Course:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+    Lecture:
+      type: object
+      properties:
+        id:
+          type: number
+        beginDate:
+          type: number
+        endDate:
+          type: number
+        courseId:
+          type: number
+    Presence:
+      type: object
+      properties:
+        id:
+          type: number
+        userId:
+          type: number
+        lectureId:
+          type: number
+        isPresent:
+          type: boolean
+    session_body:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    presences_body:
+      type: object
+      properties:
+        code:
+          type: string
+          description: the code corresponding to a scan ; mandatory if the user is a pupil
+        present:
+          type: boolean
+          description: is present or not ; mandatory if the user is a teacher or from the administration
+        userId:
+          type: number
+          description: the ID of the pupil to mark present ; mandatory if the user is a teacher or from the administration
+        lectureId:
+          type: number
+          description: the ID of the corresponding lecture ; mandatory if the user is a teacher or from the administration
+    inline_response_400:
+      type: object
+      properties:
+        error:
+          type: string
+    codes_body:
+      type: object
+      properties:
+        lectureId:
+          type: integer
+          description: the id of the lecture to generate the code
+    inline_response_201:
+      type: object
+      properties:
+        code:
+          type: string
+          description: the JWT corresponding to the code

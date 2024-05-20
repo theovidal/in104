@@ -58,6 +58,8 @@ pnpm dev
 
 The client can be access using the same port as the server (and should, as the authentication doesn't support cross-origin for security reasons).
 
+The documentation for the API is available in the `docs` folder, you can open the [index.html](./docs/index.html) in your browser, or see the OpenAPI definition in the [YAML file](./docs/api.yaml)
+
 ## Run the tests
 
 Tests are made using Jest for the API side. Before all, make sure to run the development server (see section above).
