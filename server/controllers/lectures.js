@@ -103,7 +103,7 @@ exports.getPresences = (lectureId) => {
 		db.Users.findAll({
 			include: {model: db.Lectures, where: {id: lectureId}}
 		}).then( vals => {
-			dataValues = vals.map( value => value.dataValues );
+			let dataValues = vals.map(value => value.dataValues)
 			resolve(dataValues);
 		}).catch( reject );
 	});
