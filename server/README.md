@@ -22,19 +22,20 @@ The authentication works using JWTs stored in cookies : you just have to create 
 ### Codes
 
 - `POST` code : action for teachers to create a code for a certain lecture ; include in the body :
-  - cours : id du cours où l'on veut créer un qr code
+  - courseId
+  - lectureId
 - `DELETE` code : action for teachers to delete the code, i.e. stopping to take the register ;
 
 ### Presences
 
 - `GET` presences : get all the presences (or absences) of the user (if pupil) or everyone (if administration) ; include in the body to filter :
-  - userId : ID d'un élève
-  - lectureId : ID d'une lecture
-  - isPresent : Donne les présences si true, absences si false
+  - userId : A pupil's ID
+  - lectureId
+  - isPresent : gives presences if true, absences if false
 - `PATCH` presences : action for pupils to mark their presence at a certain lecture, given a code
 - `DELETE` presences : action for teachers or the administration to manually set a pupil as absent, if the code was scanned even though they weren't in the room ; include in the body :
-  - eleveId : ID de l'élève dont on veut retirer la présence
-  - lectureId : ID de la séance concernée
+  - eleveId
+  - lectureId
 
 ## Code structure
 
