@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:8080/api'
+const apiUrl = `${window.location.origin}/api`
 
 const endpoints = {
   session: apiUrl + '/session',

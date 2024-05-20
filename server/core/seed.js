@@ -32,9 +32,8 @@ module.exports = async function seedDatabase() {
   await courses.addAttendantById(course.id, theo.id);
   await courses.addAttendantById(course.id, arnaud.id);
   const date1 = new Date()
-  date1.setDate(25);
   const date2 = new Date();
-  date2.setDate(27);
+  date2.setDate(date2.getDate() + 1);
   await lectures.create(date1, 60, course.id);
   await lectures.create(date2, 60, course.id);
 }

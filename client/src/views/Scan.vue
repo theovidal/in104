@@ -1,75 +1,74 @@
 <template>
-  <div>
+  <div class="wrap_login">
     <p class="error" v-if="error !== ''">{{ error }}</p>
     <qrcode-stream
-      v-if="result === ''"
+      v-if="!scanned"
+      :constraints="{ facingMode }"
       @detect="onDetect"
-      @error="onError"></qrcode-stream>
+      @error="onError">
+      <button @click="switchCamera">⮎</button>
+    </qrcode-stream>
     <button
-      v-if="result !== ''"
-      @click="result = ''; error = ''">Scanner de nouveau</button>
+      v-if="scanned"
+      @click="scanned = false; error = ''">Scanner de nouveau</button>
   </div>
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
-import { apiUrl, endpoints, request } from '@/utils/api.js'
+import { endpoints, request } from '@/utils/api.js'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import { ref } from 'vue'
 
 // CONSTANTS
-const regexp = new RegExp(String.raw`.*\/scan\?code=(.*)`, 'g')
 
 // REFS
 const error = ref('')
-const result = ref('')
+const scanned = ref(false)
+
+const facingMode = ref('environment')
 
 // COMPOSABLES
-const route = useRoute()
-if (route.query.code !== undefined) {
-  result.value = route.query.code;
-  validateCode();
-}
 
 // FUNCTIONS
+
+function switchCamera() {
+  switch (facingMode.value) {
+    case 'environment':
+      facingMode.value = 'user'
+      break
+    case 'user':
+      facingMode.value = 'environment'
+      break
+  }
+}
 
 function onError(err) {
   error.value = `[${err.name}]: `
 
   if (err.name === 'NotAllowedError') {
-    error.value += 'you need to grant camera access permission'
+    error.value += "Vous devez autoriser l'accès à la caméra."
   } else if (err.name === 'NotFoundError') {
-    error.value += 'no camera on this device'
+    error.value += 'Cet appareil ne comporte pas de caméra'
   } else if (err.name === 'NotSupportedError') {
-    error.value += 'secure context required (HTTPS, localhost)'
+    error.value += "Le site n'est pas sécurisé en HTTPS."
   } else if (err.name === 'NotReadableError') {
-    error.value += 'is the camera already in use?'
+    error.value += 'La caméra est déjà utilisée par une autre application.'
   } else if (err.name === 'OverconstrainedError') {
-    error.value += 'installed cameras are not suitable'
+    error.value += 'Les caméras de votre appareil ne sont pas compatibles.'
   } else if (err.name === 'StreamApiNotSupportedError') {
-    error.value += 'Stream API is not supported in this browser'
+    error.value += "Fonctionnalité de scan non supportée dans ce navigateur."
   } else if (err.name === 'InsecureContextError') {
-    error.value += 'Camera access is only permitted in secure context. Use HTTPS or localhost rather than HTTP.'
+    error.value += "Le site n'est pas sécurisé en HTTPS."
   } else {
     error.value += err.message
   }
 }
 
-function onDetect(data) {
-  console.log(data)
-  const exp = regexp.exec(data[0].rawValue)
-  console.log(exp)
-  if (exp === null) {
-    error.value = 'Le code fourni est invalide'
-    result.value = error.value
-  } else {
-    result.value = exp[1]
-    validateCode()
-  }
-}
-
-async function validateCode() {
-  const response = await request(`${endpoints.scanCode}?code=${result.value}`);
+async function onDetect(data) {
+  scanned.value = true;
+  const response = await request(endpoints.presences, 'PATCH', {
+    code: data[0].rawValue
+  });
   if (response.ok) {
     alert('Vous avez bien été noté présent au cours !')
   } else {

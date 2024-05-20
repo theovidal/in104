@@ -103,7 +103,7 @@ exports.getPresences = (lectureId) => {
 		db.Users.findAll({
 			include: {model: db.Lectures, where: {id: lectureId}}
 		}).then( vals => {
-			dataValues = vals.map( value => value.dataValues );
+			let dataValues = vals.map(value => value.dataValues)
 			resolve(dataValues);
 		}).catch( reject );
 	});
@@ -117,7 +117,7 @@ exports.getPresences = (lectureId) => {
 exports.getById = (lectureId) => {
 	return new Promise((resolve, reject) => {
 		db.Lectures.findByPk(lectureId)
-			.then( value => resolve(value.dataValues))
+			.then( value => resolve(value === null ? null : value.dataValues))
 			.catch( reject );
 	});
 }

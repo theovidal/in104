@@ -1,5 +1,5 @@
 <template>
-  <div class="courses_wrap">
+  <div class="courses_wrap wrap_login">
     <h1>Mes cours</h1>
     <div
       v-for="course in courses"
