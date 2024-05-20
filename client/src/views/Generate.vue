@@ -25,8 +25,8 @@
         v-for="(presence, index) in presences"
         :key="`${presence.userId} ${presence.lectureId}`"
         :class="{ 'present': presence.isPresent, 'absent': !presence.isPresent }">
-        <th>{{ presence.userId }}</th>
-        <th>{{ presence.userId }}</th>
+        <th>{{ presence.lastname }}</th>
+        <th>{{ presence.firstname }}</th>
         <th>{{ presence.isPresent ? 'Oui' : 'Non'}}</th>
         <th><button @click="switchPresence(index)">{{ presence.isPresent ? 'Marquer absent' : 'Marquer présent' }}</button></th>
       </tr>
@@ -93,7 +93,7 @@ async function refreshCode() {
 
 async function getPresences() {
   const response = await request(`${endpoints.presences}?lectureId=${lectureId}`);
-  presences.value = await response.json();
+  presences.value = (await response.json()).data;
 }
 
 async function switchPresence(index) {

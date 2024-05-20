@@ -47,14 +47,15 @@ module.exports = async function createPresence(req, res) {
                 error: "Accès interdit : vous n'êtes pas le professeur chargé de ce cours"
             })
             // Only the administration should be able to edit the appointment before or after the lecture
+
             const now = new Date();
-            if (now < lecture.beginDate && now > lecture.endDate) return res.status(403).json({
+            if (now < lecture.beginDate || now > lecture.endDate) return res.status(403).json({
                 error: "Vous ne pouvez pas modifier l'appel hors de l'horaire du cours"
             })
         }
 
         const present = req.body.present
-        if (typeof(present) !== 'boolean') return res.status(400).json({
+        if (typeof (present) !== 'boolean') return res.status(400).json({
             error: '"present" must be a boolean'
         })
 
