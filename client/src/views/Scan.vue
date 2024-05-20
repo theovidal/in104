@@ -2,39 +2,32 @@
   <div class="wrap_login">
     <p class="error" v-if="error !== ''">{{ error }}</p>
     <qrcode-stream
-      v-if="result === ''"
+      v-if="!scanned"
       :constraints="{ facingMode }"
       @detect="onDetect"
       @error="onError">
       <button @click="switchCamera">⮎</button>
     </qrcode-stream>
     <button
-      v-if="result !== ''"
-      @click="result = ''; error = ''">Scanner de nouveau</button>
+      v-if="scanned"
+      @click="scanned = false; error = ''">Scanner de nouveau</button>
   </div>
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
-import { apiUrl, endpoints, request } from '@/utils/api.js'
+import { endpoints, request } from '@/utils/api.js'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import { ref } from 'vue'
 
 // CONSTANTS
-const regexp = new RegExp(String.raw`.*\/scan\?code=(.*)`, 'g')
 
 // REFS
 const error = ref('')
-const result = ref('')
+const scanned = ref(false)
 
 const facingMode = ref('environment')
 
 // COMPOSABLES
-const route = useRoute()
-if (route.query.code !== undefined) {
-  result.value = route.query.code;
-  validateCode();
-}
 
 // FUNCTIONS
 
@@ -71,13 +64,10 @@ function onError(err) {
   }
 }
 
-function onDetect(data) {
-  validateCode(data[0].rawValue)
-}
-
-async function validateCode(code) {
+async function onDetect(data) {
+  scanned.value = true;
   const response = await request(endpoints.presences, 'PATCH', {
-    code
+    code: data[0].rawValue
   });
   if (response.ok) {
     alert('Vous avez bien été noté présent au cours !')
