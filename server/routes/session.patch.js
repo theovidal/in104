@@ -1,8 +1,9 @@
+// Refresh an access token using a refresh token
 const jwt = require('jsonwebtoken')
 const tokens = require('../core/tokens')
 const dayjs = require('dayjs')
 
-// Refresh an access token using a refresh token
+
 module.exports = function refreshSession(req, res) {
   const token = req.signedCookies.refreshToken
   if (token === undefined)
