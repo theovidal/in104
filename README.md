@@ -39,9 +39,9 @@ Create a `.env` file at the root of the project and populate it with the values 
 Run the server :
 
 ```bash
-npm run serve  # Using NPM
-yarn serve     # Using Yarn
-pnpm serve     # Using PNPM
+npm run dev  # Using NPM
+yarn dev     # Using Yarn
+pnpm dev     # Using PNPM
 ```
 
 Details of the architecture and API routes can be found in [the server folder](./server/README.md).
@@ -65,6 +65,12 @@ Tests are made using Jest for the API side. Before all, make sure to run the dev
 Run all the unit and coverage tests :
 
 ```bash
+# In one terminal
+npm run startTest  # Using NPM
+yarn startTest     # Using Yarn
+pnpm startTest     # Using PNPM
+
+# In another terminal
 npm run test  # Using NPM
 yarn test     # Using Yarn
 pnpm test     # Using PNPM
@@ -82,7 +88,17 @@ yarn build
 pnpm build
 ```
 
-And deploy the API on a server that supports Node.js. You'll use the same command as in the development, i.e. `npm run serve`. Make sure not to move the generated files for the client, as they are served by the server.
+And deploy the API on a server that supports Node.js. Make sure not to move the generated files for the client, as they are served by the server.
+
+You must generate new SSL certificates using the method of your choice (Let's Encrypt is a good choice though) and place them in the `server/ssl` folder.
+
+You can now run the production server :
+
+```bash
+npm run start  # Using NPM
+yarn start     # Using Yarn
+pnpm start     # Using PNPM
+```
 
 ## License
 

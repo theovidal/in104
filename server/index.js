@@ -40,8 +40,10 @@ registerRoutes(app);
 // - proxy to the Vite server if in development ;
 // - serve static files of in production.
 const proxy = require('express-http-proxy');
-const notApiRegex = /^((?!api).)*$/
 
+// Strategy to serve the client :
+// - if we are in a development environment : the client is run using the vite server, so we proxy through express
+// - if we are in production, the client was statically built, so we pass all the files and redirect the routes that are not targeting the API to the index.html (because Vue Router makes the rest of the redirections)
 if (process.env.NODE_ENV !== 'production') {
   app.all(/.*/, function(req, res, next) {
     if (req.url.startsWith('/api')) next()
@@ -71,32 +73,29 @@ app.use(errorHandler);
 
 const db = require("../db");
 
+// Loading local SSL certificates to provide our website with HTTPS
 const https = require('https');
 const fs = require('fs')
-// Loading local certificates (for development purposes only)
 let privateKey = fs.readFileSync('server/ssl/RootCA.key', 'utf8');
 let certificate = fs.readFileSync('server/ssl/RootCA.crt', 'utf8');
 
+// We export the app for future scalability : unit tests can import it to automatically start and stop the app, i.e. not having to launch a standalone terminal for this purpose.
 exports.run = function() {
   return new Promise(function (resolve, reject) {
     // Initialize the database and start the server
     db.sync({ alter: true, force: process.env.NODE_ENV !== 'production' }).then(async () => {
-      if (process.env.NODE_ENV !== 'production') await seedDatabase()
-      console.log(`Client requests will be redirected to port ${process.env.FRONT_PORT}`);
-      //if (process.env.NODE_ENV === 'development') {
-        https.createServer({
-          key: privateKey,
-          cert: certificate
-        }, app).listen(process.env.BACK_PORT, () => {
-          console.log(`💾 Server listening on port ${process.env.BACK_PORT}`)
-          resolve(app);
-        });
-      /*} else {
-        app.listen(process.env.BACK_PORT, () => {
-          console.log(`✅ Production server listening on port ${process.env.BACK_PORT}`);
-          resolve(app);
-        })
-      }*/
+      if (process.env.NODE_ENV !== 'production') {
+        await seedDatabase()
+        console.log(`Client requests will be redirected to port ${process.env.FRONT_PORT}`);
+      }
+
+      https.createServer({
+        key: privateKey,
+        cert: certificate
+      }, app).listen(process.env.BACK_PORT, () => {
+        console.log(`💾 Server listening on port ${process.env.BACK_PORT}`)
+        resolve(app);
+      });
     }).catch((err) => {
       console.error("❌ Error while creating the database");
       console.error(err);

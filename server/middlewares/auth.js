@@ -1,4 +1,3 @@
-const tokens = require('../controllers/tokens');
 const users = require('../controllers/users')
 const jwt = require('jsonwebtoken');
 
@@ -20,9 +19,6 @@ module.exports = async function authMiddleware(req, res, next) {
     return res.status(401).json({
       error: 'unauthenticated'
     });
-
-  // Before checking any token, remove the expired ones
-  //await tokens.removeExpiredTokens();
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
     if (err) {
