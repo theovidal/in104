@@ -54,7 +54,7 @@ module.exports = async function createPresence(req, res) {
         }
 
         const present = req.body.present
-        if (typeof(present) !== 'boolean') return res.status(400).json({
+        if (typeof (present) !== 'boolean') return res.status(400).json({
             error: '"present" must be a boolean'
         })
 
