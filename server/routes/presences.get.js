@@ -10,8 +10,11 @@ module.exports = async function getPresences(req, res) {
       error: "Vous ne pouvez accéder qu'à vos propres présences"
     })
 
-    const data = (await presences.getPresences(req.query.lectureId, req.query.userId, req.query.isPresent));
+    let data = (await presences.getPresences(req.query.lectureId, req.query.userId, req.query.isPresent));
     data.forEach(pupil => delete pupil.passwordHash);
+    if (res.locals.user.role === 'professeur') {
+        data = data.filter((lecture) => lecture.teacherId === res.locals.user.id);
+    }
     return res.json({
       data
     })
