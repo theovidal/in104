@@ -1,9 +1,29 @@
 html {
   font-size: 10px;
   font-family: 'Open Sans', sans-serif;
-  background: #1b1b1b;
+  background: #fff;
 }
 
+button{
+  cursor:pointer;
+  border-radius: 5px;
+  background-color: #142654;
+  color:#fff;
+  padding: 10px;
+  margin-top: 20px;
+  min-width: fit-content;
+  width: 50%;
+  border:0px;
+}
+
+p.error {
+  border: solid;
+  border-radius: 5px;
+  background-color: #FF2626;
+  border-color: #B22626;
+  color: #fff;
+  text-align: center;
+}
 
 nav{
   height: fit-content;
@@ -44,4 +64,56 @@ nav{
 .nav-item:hover{
   background-color:#142654;
   color:#E6E6E6;
+}
+
+table {
+  border-collapse: collapse;
+  border: 2px solid #000;
+  letter-spacing: 1px;
+}
+
+th,
+td {
+  border: 1px solid #555;
+  padding: 8px 10px;
+}
+
+thead{
+  background-color: rgba(28, 138, 174, 0.70);
+}
+
+tr.absent:nth-of-type(even){
+  background-color: #ffb3b3;
+}
+
+tr.absent:nth-of-type(odd){
+  background-color: #ffcccc;
+}
+
+tbody tr:nth-of-type(even) {
+  background-color: rgba(28, 138, 174, 0.2);
+}
+
+tbody tr:nth-of-type(odd) {
+  background-color: rgba(28, 138, 174, 0.3);
+}
+
+div.about{
+  display: flex;
+  align-items: flex;
+  justify-content: center;
+}
+
+.icon{
+  margin-right: 4px;
+  margin-top: 4px;
+}
+
+footer{
+  background-color: rgba(0, 0, 0, 0.5);
+  text-align: center;
+  color: #fff;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
 }

@@ -1,8 +1,10 @@
 const { Sequelize } = require("sequelize");
 
 const [db_type, db_path] = (()=> {
-	if( process.env.TEST_DB == "yes" ) {
+	if( process.env.NODE_ENV === "test" ) {
 		return ["sqlite", "testdb.sqlite"]
+	} else if( process.env.NODE_ENV === "development" ) {
+		return ["sqlite", "devdb.sqlite"]
 	} else {
 		return ["sqlite", "proddb.sqlite"]
 	}

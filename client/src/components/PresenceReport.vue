@@ -13,7 +13,8 @@
       <tbody>
       <tr
         v-for="presence in presences"
-        :key="`${presence.userId} ${presence.lectureId}`">
+        :key="`${presence.userId} ${presence.lectureId}`"
+        :class="{presence.isPresent ? "present" : "absent"}">
         <th>{{ presence.user.lastName }}</th>
         <th>{{ presence.user.firstName }}</th>
         <th>{{ presence.course.name }}</th>
