@@ -3,7 +3,7 @@ const tokens = require('../core/tokens')
 const dayjs = require('dayjs')
 
 module.exports = function refreshSession(req, res) {
-  const token = req.cookies.refreshToken
+  const token = req.signedCookies.refreshToken
   if (token === undefined)
     return res.status(401).json({
       error: 'unauthenticated'
@@ -24,6 +24,7 @@ module.exports = function refreshSession(req, res) {
     const accessToken = tokens.generateAccessToken(user.id, user.email, user.role);
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
+      signed: true,
       secure: process.env.NODE_ENV === 'production',
       expires: dayjs().add(process.env.ACCESS_TOKEN_EXPIRATION, 'seconds').toDate()
     });

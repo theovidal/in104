@@ -6,15 +6,15 @@ const jwt = require('jsonwebtoken');
 // - if not, immediately stops the request
 // - if yes, retrieves the user information and passes it to the routes using the res.locals dictionary
 module.exports = async function authMiddleware(req, res, next) {
-  if (!req.url.startsWith('/api')) return next()
+  res.locals.authenticated = false;
   // We don't check the token if :
+  // - it's not a request for the API (for instance, it's for the client)
   // - it's a CORS request (handled by the CORS middleware)
   // - the user wants to log in (POST /session)
   // - the user wants to refresh its JWT access token (PATCH /session)
-  if (req.method === 'OPTIONS' || (req.url === '/api/session' && req.method !== 'GET')) return next();
-  res.locals.authenticated = false;
+  if (!req.url.startsWith('/api') || req.method === 'OPTIONS' || (req.url === '/api/session' && req.method !== 'GET')) return next();
 
-  const token = req.cookies.accessToken;
+  const token = req.signedCookies.accessToken;
 
   if (token === undefined)
     return res.status(401).json({

@@ -12,7 +12,8 @@ module.exports = async function createSession(req, res) {
     const password = req.body.password;
 
     try {
-      await users.testCredentialsByEmail(email, password)
+      const test = await users.testCredentialsByEmail(email, password);
+      if (!test) throw new Error()
 
       const user = await users.getByEmail(email);
       const accessToken = tokens.generateAccessToken(user.id, user.email, user.role);
@@ -21,13 +22,15 @@ module.exports = async function createSession(req, res) {
 
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        signed: true,
+        secure: process.env.NODE_ENV !== 'DEVELOPMENT',
         sameSite: "strict",
         expires: dayjs().add(process.env.ACCESS_TOKEN_EXPIRATION, 'seconds').toDate()
       });
       res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        signed: true,
+        secure: process.env.NODE_ENV !== 'DEVELOPMENT',
         sameSite: "strict",
         expires: dayjs().add(process.env.REFRESH_TOKEN_EXPIRATION, 'days').toDate()
       });

@@ -4,8 +4,10 @@
   "description": "",
   "main": "server/index.js",
   "scripts": {
-    "dev": "TEST_DB=no nodemon server/index.js",
-    "test": "TEST_DB=yes jest"
+    "dev": "NODE_ENV=development nodemon server/index.js",
+    "start": "NODE_ENV=production node server/index.js",
+    "startTest": "NODE_ENV=test node server/index.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules NODE_ENV=test jest"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +15,7 @@
   "dependencies": {
     "async-mutex": "^0.5.0",
     "bcrypt": "^5.1.1",
+    "connect-history-api-fallback": "^2.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dayjs": "^1.11.11",

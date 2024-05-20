@@ -27,7 +27,7 @@ module.exports = async function createCode(req, res) {
 
     const course = await courses_fun.getById(lecture.courseId);
 
-    if (course.teacherId != res.locals.user.id) {
+    if (course.teacherId !== res.locals.user.id) {
         return res.status(403).json({
             error: 'Accès interdit'
         })
@@ -38,7 +38,7 @@ module.exports = async function createCode(req, res) {
 
     const date_requete = new Date();
     if (lecture.beginDate > date_requete || lecture.endDate < date_requete) {
-        return res.status(400).json({
+        return res.status(403).json({
             error: 'Horaire incompatible'
         })
     }
@@ -48,7 +48,7 @@ module.exports = async function createCode(req, res) {
         ppl: attendants.map(user => user.id)
     }, process.env.CODES_SECRET, { expiresIn: `${process.env.CODES_EXPIRATION}s` });
 
-    res.json({
+    res.status(201).json({
         code
     })
 }
