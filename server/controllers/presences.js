@@ -4,7 +4,8 @@ exports.getPresences = async(lectureId = undefined, userId = undefined, isPresen
   let query = `
   select * from presences
     join users on users.id = presences.userId
-    join lectures on lectures.id = presences.lectureId`;
+    join lectures on lectures.id = presences.lectureId
+   join courses on lectures.courseId = courses.id`;
 
   let replacements = {};
   // do we need to add a "and" after the query?
