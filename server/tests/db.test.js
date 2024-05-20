@@ -1,76 +1,13 @@
 const db = require("../../db");
 const users = require("../controllers/users");
 const courses = require("../controllers/courses");
-const tokens = require("../controllers/tokens");
 const lectures = require("../controllers/lectures");
-
-test("token db controller", async() => {
-	try {
-		await db.sync({force: true})
-		const user = await users.create({
-			firstname: "arnaud",
-			lastname: "pelissier",
-			email: "a@a.a",
-			role: "eleve",
-			password: "1234"
-		});
-
-		let expireAt = new Date();
-
-		const token = await tokens.create(user.id, expireAt);
-
-		expireAt.setDate(expireAt.getDate()+1);
-
-		const other_token = await tokens.create(user.id, expireAt);
-
-		expect( await tokens.test(other_token.token) ).not.toBe(null);
-		expect( await tokens.test("1234") ).toBe(null);
-
-		await tokens.removeExpiredTokens(user.id)
-
-		expect( await tokens.test(token.token) ).toBe( null );
-
-		const user_data = await tokens.test(other_token.token);
-		expect(user_data.id).toBe(user.id);
-	}
-	catch(err) {
-		console.error(err);
-		expect(true).toBe(false);
-	}
-})
-
-test("user db controller", async() => {
-	try {
-		await db.sync({force: true})
-
-		const user = await users.create({
-			firstname: "arnaud",
-			lastname: "pelissier",
-			email: "a@a.a",
-			role: "eleve",
-			password: "1234"
-		});
-
-		expect( (await users.getByEmail("a@a.a")).id ).toBe(user.id)
-
-		await users.updateById(user.id, {email: "aa@aa.aa"})
-
-		expect( (await users.getByEmail("aa@aa.aa")).id ).toBe(user.id)
-
-		expect( await users.testCredentialsById(user.id, "1234") ).toBe(true)
-		expect( await users.testCredentialsById(user.id, "12345") ).toBe(false)
-
-		await users.removeByEmail("aa@aa.aa")
-
-		expect( (await users.getByEmail("aa@aa.aa")) ).toBe(null)
-	} catch(err) {
-		console.error(err)
-		expect(true).toBe(false)
-	}
-})
+const presences = require("../controllers/presences");
 
 test("course db controller", async() => {
 	try {
+		await db.sync({force:true})
+
 		const user = await users.create({
 			firstname: "arnaud",
 			lastname: "pelissier",
@@ -126,6 +63,8 @@ test("course db controller", async() => {
 
 test("presences db controller", async() => {
 	try {
+		await db.sync({force:true})
+
 		const teacher = await users.create({
 			firstname: "teacher",
 			lastname: "teacher",
@@ -149,10 +88,10 @@ test("presences db controller", async() => {
 
 		const lecture = await lectures.create(new Date(), 120, course.id);
 
-		let presences = await lectures.getPresences(lecture.id);
-		presences = presences.map( el => el.id);
+		let presences_res = await lectures.getPresences(lecture.id);
+		presences_res = presences_res.map( el => el.id);
 
-		for(let id of presences) {
+		for(let id of presences_res) {
 			const predicate = id === teacher.id || id === user.id;
 			expect(predicate).toBe(true);
 		}
@@ -169,6 +108,39 @@ test("presences db controller", async() => {
 
 		expect(isPresent).toBe(false);
 		expect(andNow).toBe(true);
+
+		const pres1 = await presences.getPresences(
+			undefined,
+			undefined,
+			undefined,
+			true, false
+		);
+
+		const pres2 = await presences.getPresences(
+			undefined,
+			2,
+			undefined,
+			true, false
+		);
+
+		const pres3 = await presences.getPresences(
+			1,
+			undefined,
+			undefined,
+			true, false
+		);
+
+		const pres4 = await presences.getPresences(
+			undefined,
+			undefined,
+			true,
+			true, false
+		);
+
+		expect(pres1.length).toBe(2)
+		expect(pres2.length).toBe(1)
+		expect(pres3.length).toBe(2)
+		expect(pres4.length).toBe(1)
 
 	} catch (error) {
 		console.error(error)

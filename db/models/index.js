@@ -33,7 +33,20 @@ db.Courses.hasMany(db.Lectures);
 db.Lectures.belongsTo(db.Courses);
 
 // à chaque instance de cours, pleins d'élèves + s'ils sont là ou pas
-db.Lectures.belongsToMany(db.Users, {through: db.Presences});
-db.Users.belongsToMany(db.Lectures, {through: db.Presences});
+db.Lectures.belongsToMany(db.Users, {
+	through: db.Presences,
+	foreignKey: "lectureId",
+	otherKey: "userId"
+});
+
+db.Users.belongsToMany(db.Lectures, {
+	through: db.Presences,
+	foreignKey: "userId",
+	otherKey: "lectureId"
+});
+
+// il faut aussi ajouter cette association...
+db.Presences.hasOne(db.Users, {foreignKey: "id"})
+db.Presences.hasOne(db.Lectures, {foreignKey: "id"})
 
 module.exports = db;
