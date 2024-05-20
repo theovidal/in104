@@ -12,13 +12,13 @@
       </thead>
       <tbody>
       <tr
-        v-for="presence in presences"
+        v-for="presence in presences.data"
         :key="`${presence.userId} ${presence.lectureId}`"
-        :class="{presence.isPresent ? "present" : "absent"}">
-        <th>{{ presence.user.lastName }}</th>
-        <th>{{ presence.user.firstName }}</th>
-        <th>{{ presence.course.name }}</th>
-        <th>{{ presence.lecture.date }}</th>
+        :class="{'present': presence.isPresent, 'absent': !presence.isPresent}">
+        <th>{{ presence.lastname }}</th>
+        <th>{{ presence.firstname }}</th>
+        <th>{{ presence.name }}</th>
+        <th>{{ dayjs(presence.beginDate).locale('fr').format('LLL') }}</th>
         <th>{{ presence.isPresent ? 'Oui' : 'Non'}}</th>
       </tr>
       </tbody>
@@ -27,17 +27,18 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { endpoints, request } from '@/utils/api.js';
 import { saveAs } from 'file-saver';
+import dayjs from 'dayjs'
 
 const response = await request(endpoints.presences);
 const presences = await response.json();
 
 function exportPresences() {
   let data = "Nom,Prénom,Cours,Date,Présent ?\n";
-  for (const presence of presences) {
-    data += `${presence.user.firstName},${presence.user.lastName},${presence.course.name},${presence.lecture.date},${presence.isPresent ? 'Oui' : 'Non'}\n`;
+  for (const presence of presences.data) {
+    data += `${presence.firstname},${presence.lastname},${presence.name},${presence.beginDate},${presence.isPresent ? 'Oui' : 'Non'}\n`;
   }
 
   const blob = new Blob([data], {

@@ -28,6 +28,14 @@ module.exports = async function seedDatabase() {
     password: "abcd"
   });
 
+  await users.create({
+    firstname: 'Mégane',
+    lastname: 'Perez',
+    email: "megane.perez@ensta-paris.fr",
+    role: "administration",
+    password: "admin"
+  })
+
   const course = await courses.create(teacher.id, "MA102 - Groupe 7");
   await courses.addAttendantById(course.id, theo.id);
   await courses.addAttendantById(course.id, arnaud.id);
