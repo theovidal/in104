@@ -32,7 +32,7 @@ exports.create = ({firstname, lastname, email, role, password}) => {
 		bcrypt.hash(password, 10, async(err, hash) => {
 			if(err !== undefined) {
 				console.error("Impossible de hacher le mdp de ", firstname, lastname);
-				reject(err)
+				reject(err);
 			}
 			
 			db.Users.create({
@@ -43,7 +43,7 @@ exports.create = ({firstname, lastname, email, role, password}) => {
 				passwordHash: hash
 			})
 				.then( user => resolve(user.dataValues))
-				.catch( err => reject(err) )
+				.catch( err => reject(err) );
 		});
 	})
 }
@@ -57,7 +57,7 @@ exports.testCredentialsByEmail = (email, password) => {
 	// j'ai eu un problème avec ça donc au fur et à mesure, j'ajoute des conditions
 	return new Promise((resolve, reject) => {
 		if( email === undefined || password === undefined)  {
-			reject("arguments manquants")
+			reject("arguments manquants");
 		}
 
 		// récupération de l'objet "utilisateur" dans la bdd
@@ -69,11 +69,11 @@ exports.testCredentialsByEmail = (email, password) => {
 
 			bcrypt.compare(password, user.passwordHash, (err, same) => {
 				if(err !== undefined) {
-					reject(err)
+					reject(err);
 				}
-				resolve(same)				
+				resolve(same);
 			})
-		}).catch( err => reject(err) )
+		}).catch( err => reject(err) );
 	})
 }
 
@@ -87,31 +87,31 @@ exports.testCredentialsById = (id, password) => {
 	// j'ai eu un problème avec ça donc au fur et à mesure, j'ajoute des conditions
 	return new Promise((resolve, reject) => {
 		if( id === undefined || password === undefined)  {
-			reject("arguments manquants")
+			reject("arguments manquants");
 		}
 
 		// récupération de l'objet "utilisateur" dans la bdd
 		exports.getById(id).then( user => {
 			bcrypt.compare(password, user.passwordHash, (err, same) => {
 				if(err !== undefined) {
-					reject(err)
+					reject(err);
 				}
-				resolve(same)				
-			})
-		}).catch( err => reject(err) )
+				resolve(same);
+			});
+		}).catch( err => reject(err) );
 	})
 }
 
 exports.removeByEmail = (email) => {
 	return new Promise((resolve, reject) => {
-		db.Users.destroy({where: {email: email}}).then( resolve ).catch( reject )
-	})
+		db.Users.destroy({where: {email: email}}).then( resolve ).catch( reject );
+	});
 }
 
 exports.removeById = (id) => {
 	return new Promise((resolve, reject) => {
-		db.Users.destroy({where: {id: id}}).then( resolve ).catch( reject )
-	})
+		db.Users.destroy({where: {id: id}}).then( resolve ).catch( reject );
+	});
 }
 
 /**
@@ -123,17 +123,17 @@ exports.updateByEmail = (email, newUser) => {
 	// retire les clefs non définies de l'objet newUser
 	newUser = Object.fromEntries(Object.entries(newUser).filter(([key, val]) => {
 		return val !== undefined;
-	}))
+	}));
 
 	return new Promise( async(resolve, reject) => {
 		try {
 			const user = await db.Users.findOne({where:{email: email}});
-			const updatedUser = await user.set(newUser)
-			await updatedUser.save()
-			resolve( updatedUser !== null ? updatedUser.dataValues: null )
+			const updatedUser = await user.set(newUser);
+			await updatedUser.save();
+			resolve( updatedUser !== null ? updatedUser.dataValues: null );
 		}
 		catch(err) {
-			reject(err)
+			reject(err);
 		}
 	})
 }
@@ -147,17 +147,17 @@ exports.updateById = (id, newUser) => {
 	// retire les clefs non définies de l'objet newUser
 	newUser = Object.fromEntries(Object.entries(newUser).filter(([key, val]) => {
 		return val !== undefined;
-	}))
+	}));
 
 	return new Promise( async(resolve, reject) => {
 		try {
 			const user = await db.Users.findOne({where:{id: id}});
-			const updatedUser = await user.set(newUser)
-			await updatedUser.save()
-			resolve( updatedUser !== null ? updatedUser.dataValues: null )
+			const updatedUser = await user.set(newUser);
+			await updatedUser.save();
+			resolve( updatedUser !== null ? updatedUser.dataValues: null );
 		}
 		catch(err) {
-			reject(err)
+			reject(err);
 		}
 	})
 }

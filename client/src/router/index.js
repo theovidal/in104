@@ -40,10 +40,9 @@ router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
   const isLogged = await authStore.getSession()
-  if (to.name !== 'login' && !isLogged) return { name: 'login', query: { redirect: to.path }}
-
-  if (to.meta.roles !== undefined && !to.meta.roles.includes(authStore.data.role)) return '/'
-  next()
+  if (to.name !== 'login' && !isLogged) next({ name: 'login', query: { redirect: to.path }})
+  else if (to.meta.roles !== undefined && !to.meta.roles.includes(authStore.data.role)) next('/')
+  else next()
 })
 
 export default router

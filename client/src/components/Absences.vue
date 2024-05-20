@@ -15,7 +15,7 @@
 <script setup>
 import { endpoints, request } from '@/utils/api.js'
 
-const response = await request(endpoints.absences)
+const response = await request(endpoints.presences)
 let presences = await response.json()
 
 let courses = {}
@@ -24,12 +24,12 @@ let courses = {}
 // - The lecture associated with this presence
 //
 for (let presence of presences) {
-  const response = await request(`${endpoints.lectures}/${presence.lectureId}`);
+  const response = await request(`${endpoints.lectures}?id=${presence.lectureId}`);
   const lecture = await response.json();
   presence.lecture = lecture;
 
   if (courses[lecture.courseId] !== undefined) {
-    const course = await request(`${endpoints.course}/${lecture.courseId}`);
+    const course = await request(`${endpoints.courses}?id=${lecture.courseId}`);
     courses[lecture.courseId] = await course.json();
   }
 }

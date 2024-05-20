@@ -1,20 +1,21 @@
-const apiUrl = 'http://localhost:8080'
+const apiUrl = 'http://localhost:8080/api'
 
 const endpoints = {
-  login: apiUrl + '/login',
-  profile: apiUrl + '/profile',
-  createCode: apiUrl + '/create-code',
-  scanCode: apiUrl + '/scan-code',
+  session: apiUrl + '/session',
+  presences: apiUrl + '/presences',
+  lectures: apiUrl + '/lectures',
+  codes: apiUrl + '/codes',
+  courses: apiUrl + '/courses'
 }
 
 function request(url, method = 'GET', params = undefined) {
   return fetch(url, {
     method: method,
+    credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
-      'Authentication': localStorage.getItem('token')
     },
-    body: JSON.stringify(params)
+    body: JSON.stringify(params),
   })
 }
 

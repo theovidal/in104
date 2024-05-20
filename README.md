@@ -32,11 +32,11 @@ cd client
 (do the same command)
 ```
 
-Create a `.env` file at the root of the folder (so at the same level as `index.js`) and populate it with the values given in the [example .env](../.env.example).
+Create a `.env` file at the root of the project and populate it with the values given in the [example .env](.env.example).
 
 ## Run a development server
 
-Run the API server :
+Run the server :
 
 ```bash
 npm run serve  # Using NPM
@@ -55,6 +55,8 @@ npm run dev
 yarn dev
 pnpm dev
 ```
+
+The client can be access using the same port as the server (and should, as the authentication doesn't support cross-origin for security reasons).
 
 ## Run the tests
 
@@ -80,7 +82,7 @@ yarn build
 pnpm build
 ```
 
-And deploy the API on a server that supports Node.js. You'll use the same command as in the development, i.e. `npm run serve`.
+And deploy the API on a server that supports Node.js. You'll use the same command as in the development, i.e. `npm run serve`. Make sure not to move the generated files for the client, as they are served by the server.
 
 ## License
 
