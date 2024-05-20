@@ -31,7 +31,7 @@ The authentication works using JWTs stored in cookies : you just have to create 
   - userId : ID d'un élève
   - lectureId : ID d'une lecture
   - isPresent : Donne les présences si true, absences si false
-- `POST` presences : action for pupils to mark their presence at a certain lecture, given a code
+- `PATCH` presences : action for pupils to mark their presence at a certain lecture, given a code
 - `DELETE` presences : action for teachers or the administration to manually set a pupil as absent, if the code was scanned even though they weren't in the room ; include in the body :
   - eleveId : ID de l'élève dont on veut retirer la présence
   - lectureId : ID de la séance concernée
