@@ -4,7 +4,7 @@
       <img src="/logo_ensta_paris.jpg" alt="Logo ENSTA Paris" height="200vh" width="auto" />
       <h1>Entrez vos identifiants</h1>
     </div>
-    <!-- formulaire de connexion -->
+    <!-- connexion form -->
     <div>
       <div class="form_login">
         <input v-model="email" type="email" id="email" name="email" placeholder="Adresse email" required="required"/>

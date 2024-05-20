@@ -27,13 +27,12 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function login(email, password) {
-    // TODO : éventuellement try/catch pour gestion d'erreur du fetch en lui-même
     const response = await request(endpoints.session, 'POST', {
       email,
       password
     });
 
-    // Vérification
+    // Checking
     if (response.ok){
       data.value = await response.json();
       authenticated.value = true
@@ -41,7 +40,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
     else{
       alert("Mauvais identifiant ou mot de passe");
-      //TODO : éventuellement un affichage dynamique sur la page ?
       return false
     }
   }
