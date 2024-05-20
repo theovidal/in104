@@ -24,7 +24,7 @@ module.exports = function refreshSession(req, res) {
     const accessToken = tokens.generateAccessToken(user.id, user.email, user.role);
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       expires: dayjs().add(process.env.ACCESS_TOKEN_EXPIRATION, 'seconds').toDate()
     });
     res.status(204).send()

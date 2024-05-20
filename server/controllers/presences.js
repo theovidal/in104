@@ -1,4 +1,5 @@
 const db = require('../../db/models')
+const { Sequelize } = require('sequelize')
 
 exports.getPresences = (lectureId = undefined, userId = undefined, isPresent = undefined, includeUser = false, includeLecture = false) => {
   let where = {
