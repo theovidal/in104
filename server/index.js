@@ -56,13 +56,28 @@ app.use(errorHandler);
 
 const db = require("../db");
 
+const https = require('https');
+const fs = require('fs')
+// Loading local certificates (for development purposes only)
+let privateKey = fs.readFileSync('server/ssl/RootCA.key', 'utf8');
+let certificate = fs.readFileSync('server/ssl/RootCA.crt', 'utf8');
+
 // Initialize the database and start the server
 db.sync({force: true}).then(async () => {
   await seedDatabase()
-  app.listen(process.env.BACK_PORT, () => {
-    console.log(`✅ Listening on port ${process.env.BACK_PORT}`);
-    console.log(`Client requests will be redirected to port ${process.env.FRONT_PORT}`);
-  })
+  console.log(`Client requests will be redirected to port ${process.env.FRONT_PORT}`);
+  if (process.env.NODE_ENV === 'development') {
+    https.createServer({
+      key: privateKey,
+      cert: certificate
+    }, app).listen(process.env.BACK_PORT, () => {
+      console.log(`💾 Development server listening on port ${process.env.BACK_PORT}`)
+    });
+  } else {
+    app.listen(process.env.BACK_PORT, () => {
+      console.log(`✅ Production server listening on port ${process.env.BACK_PORT}`);
+    })
+  }
 }).catch( (err) => {
   console.error("❌ Error while creating the database")
   console.error(err)
