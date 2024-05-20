@@ -98,6 +98,17 @@ tbody tr:nth-of-type(odd) {
   background-color: rgba(28, 138, 174, 0.3);
 }
 
+div.about{
+  display: flex;
+  align-items: flex;
+  justify-content: center;
+}
+
+.icon{
+  margin-right: 4px;
+  margin-top: 4px;
+}
+
 footer{
   background-color: rgba(0, 0, 0, 0.5);
   text-align: center;

@@ -8,11 +8,18 @@
           class="nav-item"
           v-if="authStore.data.role === 'eleve'"
           to="/scan">Scanner un code</RouterLink>
+        <RouterLink
+          class="nav-item"
+          v-if="authStore.data.role === 'professeur'"
+          to="/generate">Faire l'appel</RouterLink>
+        <div class="user_show">
+          <img class=icon src="/user_icon.png" height=13px>
         {{ authStore.data.firstname }} {{ authStore.data.lastname }}
         <RouterLink
           class="nav-item"
           @click="authStore.logout(); router.push({ name: 'login' })"
           to="/login">Déconnexion</RouterLink>
+        </div>
       </nav>
     </div>
   </header>
