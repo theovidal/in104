@@ -33,7 +33,7 @@ nav{
     font-size: 10px;
 }
 
-.nav-item:hover{
+.nav-item:hover:not(.disabled){
     background-color:#142654;
     color:#E6E6E6;
 }
@@ -44,6 +44,5 @@ footer{
     font-size: small;
     color: #fff;
     width: 100%;
-    position: absolute;
     bottom: 0;
 }
