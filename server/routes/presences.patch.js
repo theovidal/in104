@@ -54,9 +54,9 @@ module.exports = async function createPresence(req, res) {
             })
         }
 
-        const present = req.body.present
-        if (typeof (present) !== 'boolean') return res.status(400).json({
-            error: '"present" must be a boolean'
+        const isPresent = req.body.isPresent
+        if (typeof (isPresent) !== 'boolean') return res.status(400).json({
+            error: '"isPresent" must be a boolean'
         })
 
         const pupilId = req.body.userId
@@ -69,7 +69,7 @@ module.exports = async function createPresence(req, res) {
             error: "unknown user"
         })
 
-        await lectures_fun.updatePresence(lecture.id, pupil.id, present);
+        await lectures_fun.updatePresence(lecture.id, pupil.id, isPresent);
         res.status(204).send();
     }
 }

@@ -1,0 +1,17 @@
+input[type=email]{
+    background: #e6e6e6;
+    border: #aaaaaa;
+    min-width: fit-content;
+    width: 50%;
+    padding:10px;
+    border-radius: 5px;
+}
+
+input[type=password]{
+    background: #e6e6e6;
+    border: #aaaaaa;
+    min-width: fit-content;
+    width: 50%;
+    padding:10px;
+    border-radius: 5px;
+}

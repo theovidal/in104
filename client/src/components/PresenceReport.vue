@@ -1,5 +1,5 @@
 <template>
-  <div class="presence_report_wrap">
+  <div class="center_wrap">
     <table>
       <thead>
         <tr>

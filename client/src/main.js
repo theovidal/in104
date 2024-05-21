@@ -1,4 +1,4 @@
-import './assets/main.css'
+import './assets/index.css'
 import dayjs from 'dayjs'
 import localisedFormat from 'dayjs/plugin/localizedFormat'
 import { createApp } from 'vue'

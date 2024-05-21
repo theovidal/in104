@@ -47,7 +47,9 @@ export const useAuthStore = defineStore('auth', () => {
   async function logout() {
     await request(endpoints.session, 'DELETE');
     authenticated.value = false;
-    data.value = {};
+    for (const key in data.value) {
+      delete data.value[key]
+    }
   }
 
   return { authenticated, data, login, logout, getSession }

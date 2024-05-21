@@ -1,0 +1,31 @@
+table {
+    border-collapse: collapse;
+    border: 2px solid #000;
+    letter-spacing: 1px;
+}
+
+th,
+td {
+    border: 1px solid #555;
+    padding: 8px 10px;
+}
+
+thead{
+    background-color: rgba(28, 138, 174, 0.70);
+}
+
+tr.absent:nth-of-type(even){
+    background-color: #ffb3b3;
+}
+
+tr.absent:nth-of-type(odd){
+    background-color: #ffcccc;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: rgba(28, 138, 174, 0.2);
+}
+
+tbody tr:nth-of-type(odd) {
+    background-color: rgba(28, 138, 174, 0.3);
+}

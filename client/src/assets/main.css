@@ -4,98 +4,46 @@ html {
   background: #fff;
 }
 
-button{
+h1{
+  font-size: 30px;
+  text-align: center;
+  color: #777777;
+}
+
+body{
+  background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("/backgrounds/amphi2026.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100vw auto;
+}
+
+main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  min-height: 100vh;
+}
+
+button {
   cursor:pointer;
   border-radius: 5px;
   background-color: #142654;
   color:#fff;
+  font-size: 25px;
   padding: 10px;
   margin-top: 20px;
   min-width: fit-content;
   width: 50%;
-  border:0px;
+  border: 0;
 }
 
 p.error {
-  border: solid;
   border-radius: 5px;
   background-color: #FF2626;
-  border-color: #B22626;
+  border: solid #B22626;
   color: #fff;
   text-align: center;
-}
-
-nav{
-  height: fit-content;
-  width: 100%;
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: auto;
-  padding-right: auto;
-  padding-top: 0;
-  padding-bottom: 0;
-  position: sticky;
-  top: 0;
-
-  background: #E6E6E6 !important;
-
-  align-items: center;
-  justify-content: space-between;
-  text-align: center;
-  vertical-align: baseline;
-}
-
-.logo{
-  margin: 15px;
-  display: inline-block;
-}
-
-.nav-item{
-  display: inline-block;
-  padding: 10px 15px;
-  text-decoration: none !important;
-  border: 10px !important;
-  border-color: crimson !important;
-  color: #142654;
-  font-size: 10px;
-}
-
-.nav-item:hover{
-  background-color:#142654;
-  color:#E6E6E6;
-}
-
-table {
-  border-collapse: collapse;
-  border: 2px solid #000;
-  letter-spacing: 1px;
-}
-
-th,
-td {
-  border: 1px solid #555;
-  padding: 8px 10px;
-}
-
-thead{
-  background-color: rgba(28, 138, 174, 0.70);
-}
-
-tr.absent:nth-of-type(even){
-  background-color: #ffb3b3;
-}
-
-tr.absent:nth-of-type(odd){
-  background-color: #ffcccc;
-}
-
-tbody tr:nth-of-type(even) {
-  background-color: rgba(28, 138, 174, 0.2);
-}
-
-tbody tr:nth-of-type(odd) {
-  background-color: rgba(28, 138, 174, 0.3);
 }
 
 div.about{
@@ -107,13 +55,4 @@ div.about{
 .icon{
   margin-right: 4px;
   margin-top: 4px;
-}
-
-footer{
-  background-color: rgba(0, 0, 0, 0.5);
-  text-align: center;
-  color: #fff;
-  width: 100%;
-  position: absolute;
-  bottom: 0;
 }

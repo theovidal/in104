@@ -8,10 +8,6 @@
           class="nav-item"
           v-if="authStore.data.role === 'eleve'"
           to="/scan">Scanner un code</RouterLink>
-        <RouterLink
-          class="nav-item"
-          v-if="authStore.data.role === 'professeur'"
-          to="/generate">Faire l'appel</RouterLink>
         <div class="user_show">
           <img class=icon src="/user_icon.png" height=13px>
         {{ authStore.data.firstname }} {{ authStore.data.lastname }}
@@ -29,8 +25,8 @@
   </main>
 
   <footer v-if="!isMobile()">
-    <p>This webpage was created for a class project. It is not suitable for online release</p>
-    <p>DO WHATEVER YOU WANT TO PUBLIC LICENSE Version 2, December 2004</p>
+    <p>Cette page a été crée pour un projet scolaire. Il n'est pas fait pour être disponible publiquement.</p>
+    <p>Arnaud PELISSIER - Doris DIALLO - Seydou SENE - Théo VIDAL</p>
   </footer>
 </template>
 

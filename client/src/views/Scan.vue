@@ -1,5 +1,5 @@
 <template>
-  <div :class="isMobile() ? 'mobile_wrap_login' : 'desktop_wrap_login'">
+  <div :class="isMobile() ? 'mobile_center_wrap' : 'center_wrap'">
     <p class="error" v-if="error !== ''">{{ error }}</p>
     <qrcode-stream
       v-if="!scanned"

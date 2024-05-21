@@ -1,5 +1,5 @@
 <template>
-  <div class="generate wrap_login">
+  <div class="center_wrap">
     <button @click="onSwitchGeneration">{{ generation ? 'Arrêter' : "Faire l'appel" }}</button>
 
     <!-- Text to display when the code is currently being generated -->
@@ -101,14 +101,14 @@ async function switchPresence(index) {
   const response = await request(endpoints.presences, 'PATCH', {
     lectureId,
     userId: presence.userId,
-    present: !presence.isPresent
+    isPresent: !presence.isPresent
   })
   if (!response.ok) {
     const body = await response.json()
     alert(body.error);
     return
   }
-  presences.value[index].present = !presence.isPresent;
+  presences.value[index].isPresent = !presence.isPresent;
 }
 </script>
 
