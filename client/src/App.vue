@@ -28,7 +28,7 @@
     <RouterView />
   </main>
 
-  <footer>
+  <footer v-if="!isMobile()">
     <p>This webpage was created for a class project. It is not suitable for online release</p>
     <p>DO WHATEVER YOU WANT TO PUBLIC LICENSE Version 2, December 2004</p>
   </footer>
@@ -37,6 +37,7 @@
 <script setup>
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useAuthStore } from "@/stores/auth.js";
+import { isMobile } from "@/utils/device";
 
 const authStore = useAuthStore()
 const router = useRouter()

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap_login">
+  <div :class="isMobile() ? 'mobile_wrap_login' : 'desktop_wrap_login'">
     <p class="error" v-if="error !== ''">{{ error }}</p>
     <qrcode-stream
       v-if="!scanned"
@@ -18,6 +18,7 @@
 import { endpoints, request } from '@/utils/api.js'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import { ref } from 'vue'
+import { isMobile } from "@/utils/device";
 
 // CONSTANTS
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap_login">
+  <div :class="isMobile() ? 'mobile_wrap_login' : 'desktop_wrap_login'">
     <div class="header_login">
       <img src="/logo_ensta_paris.jpg" alt="Logo ENSTA Paris" height="200vh" width="auto" />
       <h1>Entrez vos identifiants</h1>
@@ -24,6 +24,7 @@
 import { ref } from "vue";
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from "@/stores/auth.js";
+import { isMobile } from "@/utils/device";
 
 // --------- COMPOSABLES ------------
 const authStore = useAuthStore()
@@ -72,6 +73,35 @@ main{
 }
 
 .wrap_login{
+  width: 60vh;
+  min-width: auto;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  padding: 5vh 10px;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  bottom: 10vh;
+}
+
+.mobile_wrap_login{
+  width: 100%;
+  height: 100vh;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 5vh 10px;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+}
+
+.desktop_wrap_login{
   width: 60vh;
   min-width: auto;
   max-width: 500px;
