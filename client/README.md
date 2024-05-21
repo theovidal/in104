@@ -1,6 +1,8 @@
-# vue-project
+# ENSTA Sign - Client
 
-This template should help get you started developing with Vue 3 in Vite.
+This folder contains the front-end of the projet, i.e. the Vue app that will be served to the client.
+
+This app then makes requests to the API on the same domain.
 
 ## Recommended IDE Setup
 
@@ -11,6 +13,8 @@ This template should help get you started developing with Vue 3 in Vite.
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
+
+Please first check the [global project configuration](../README.md) as all the instructions are way more detailed there.
 
 ```sh
 pnpm install
@@ -26,12 +30,6 @@ pnpm dev
 
 ```sh
 pnpm build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-pnpm test:unit
 ```
 
 ### Lint with [ESLint](https://eslint.org/)

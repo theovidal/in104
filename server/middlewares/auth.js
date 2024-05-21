@@ -1,42 +1,37 @@
-const tokens = require('../controllers/tokens');
 const users = require('../controllers/users')
+const jwt = require('jsonwebtoken');
 
 // The authentication middleware checks if the user is connected :
 // - if not, immediately stops the request
 // - if yes, retrieves the user information and passes it to the routes using the res.locals dictionary
 module.exports = async function authMiddleware(req, res, next) {
-  // Would be a CORS request
-  if (req.method === 'OPTIONS' || req.url === '/login') {
-    next();
-    return;
-  }
   res.locals.authenticated = false;
+  // We don't check the token if :
+  // - it's not a request for the API (for instance, it's for the client)
+  // - it's a CORS request (handled by the CORS middleware)
+  // - the user wants to log in (POST /session)
+  // - the user wants to refresh its JWT access token (PATCH /session)
+  if (!req.url.startsWith('/api') || req.method === 'OPTIONS' || (req.url === '/api/session' && req.method !== 'GET')) return next();
 
-  const token = req.headers['authentication'];
-  const id = req.headers['id'];
+  const token = req.signedCookies.accessToken;
 
-  if (id === undefined || tokens === undefined) {
-    res.status(401).json({
+  if (token === undefined)
+    return res.status(401).json({
       error: 'unauthenticated'
     });
-    return;
-  }
 
-  // Before checking any token, remove the expired ones
-  await tokens.removeExpiredTokens(id);
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, payload) => {
+    if (err) {
+      res.clearCookie('accessToken');
+      return res.status(403).json({
+        error: 'invalid token'
+      });
+    }
 
-  try {
-    if (await tokens.test(id, token)) {
-      const data = await users.getById(id);
-      delete data.passwordHash;
-
-      res.locals.user = data;
-      res.locals.authenticated = true;
-      next();
-    } else throw new Error()
-  } catch (_) {
-    res.status(403).json({
-      error: 'invalid token'
-    });
-  }
+    const user = await users.getById(payload.id);
+    delete user.passwordHash;
+    res.locals.authenticated = true;
+    res.locals.user = user;
+    next()
+  })
 }

@@ -1,42 +1,62 @@
 html {
   font-size: 10px;
   font-family: 'Open Sans', sans-serif;
-  background: #1b1b1b;
+  background: #fff;
 }
 
-
-nav{
-  width: 100%;
-  display: flex;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: auto;
-  padding-right: auto;
-  position: sticky;
-  top: 0;
-
-  background: #E6E6E6 !important;
-
-  align-items: center;
-  justify-content: space-between;
+h1{
+  font-size: 30px;
   text-align: center;
-  vertical-align: baseline;
+  color: #777777;
 }
 
-.navigation-links{
-  list-style: none;
-  display: inline-block;
+body{
+  background-image: linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url("/backgrounds/amphi2026.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100vw auto;
 }
 
-.navigation-item{
-  display: inline-block;
-  padding: 10px 15px;
-  text-decoration: none !important;
-  border: 10px !important;
-  border-color: crimson !important;
+main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  vertical-align: middle;
+  min-height: 100vh;
 }
 
-.logo{
-  margin: 15px;
-  display: inline-block;
+button {
+  cursor:pointer;
+  border-radius: 5px;
+  background-color: #142654;
+  color:#fff;
+  font-size: 25px;
+  padding: 10px;
+  margin-top: 20px;
+  min-width: fit-content;
+  width: 50%;
+  border: 0;
+}
+
+a.disabled {
+  color: grey;
+}
+
+p.error {
+  border-radius: 5px;
+  background-color: #FF2626;
+  border: solid #B22626;
+  color: #fff;
+  text-align: center;
+}
+
+div.about{
+  display: flex;
+  align-items: flex;
+  justify-content: center;
+}
+
+.icon{
+  margin-right: 4px;
+  margin-top: 4px;
 }

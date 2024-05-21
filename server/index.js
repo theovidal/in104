@@ -1,14 +1,19 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const users = require('./controllers/users');
+const seedDatabase = require('./core/seed')
+const history = require('connect-history-api-fallback');
 
 // Importing all the values stored in the .env
 require('dotenv').config();
 
 // CORS (Cross-Origin resource sharing) policy middleware, to enable the client to interact with the API
 // https://developer.mozilla.org/fr/docs/Web/HTTP/CORS
-app.use(cors())
+app.use(cors({
+  credentials: true,
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept'],
+  //origin: process.env.API_URL
+}))
 app.options('*', cors()) // include before other routes
 
 // Cookie parsing middleware, to have access to them with req.cookies
@@ -27,29 +32,76 @@ app.use(authMiddleware);
 const logger = require('./middlewares/logger');
 app.use(logger(process.env.LOGS));
 
-
 // Helper to register every route located in the /routes directory
 const registerRoutes = require('./core/registerRoutes');
 registerRoutes(app);
+
+// Strategies to manage the client :
+// - proxy to the Vite server if in development ;
+// - serve static files of in production.
+const proxy = require('express-http-proxy');
+
+// Strategy to serve the client :
+// - if we are in a development environment : the client is run using the vite server, so we proxy through express
+// - if we are in production, the client was statically built, so we pass all the files and redirect the routes that are not targeting the API to the index.html (because Vue Router makes the rest of the redirections)
+if (process.env.NODE_ENV !== 'production') {
+  app.all(/.*/, function(req, res, next) {
+    if (req.url.startsWith('/api')) next()
+    else proxy(`http://localhost:${process.env.FRONT_PORT}`)(req, res, next);
+  })
+} else {
+  app.use(express.static(process.env.FRONT_BUILD_PATH));
+  app.use(history({
+    disableDotRule: true,
+    verbose: true,
+    rewrites: [
+      {
+        from: /^\/api\/.*$/,
+        to: function(context) {
+          return context.parsedUrl.path
+        }
+      }
+    ]
+  }));
+  app.use(express.static(process.env.FRONT_BUILD_PATH));
+}
+
 
 // Error handling middleware, to return formatted errors to the user
 const errorHandler = require('./middlewares/errors');
 app.use(errorHandler);
 
-const db = require("../db")
+const db = require("../db");
 
-// Initialize the database and start the server
-db.sync({force: true}).then(() => {
-  users.create({
-    firstname: "Théo",
-    lastname: "Vidal",
-    email: "theo.vidal@ensta-paris.fr",
-    role: "eleve",
-    password: "abcabc"
+// Loading local SSL certificates to provide our website with HTTPS
+const https = require('https');
+const fs = require('fs')
+let privateKey = fs.readFileSync('server/ssl/RootCA.key', 'utf8');
+let certificate = fs.readFileSync('server/ssl/RootCA.crt', 'utf8');
+
+// We export the app for future scalability : unit tests can import it to automatically start and stop the app, i.e. not having to launch a standalone terminal for this purpose.
+exports.run = function() {
+  return new Promise(function (resolve, reject) {
+    // Initialize the database and start the server
+    db.sync({ alter: true, force: process.env.NODE_ENV !== 'production' }).then(async () => {
+      if (process.env.NODE_ENV !== 'production') {
+        await seedDatabase()
+        console.log(`Client requests will be redirected to port ${process.env.FRONT_PORT}`);
+      }
+
+      https.createServer({
+        key: privateKey,
+        cert: certificate
+      }, app).listen(process.env.BACK_PORT, () => {
+        console.log(`💾 Server listening on port ${process.env.BACK_PORT}`)
+        resolve(app);
+      });
+    }).catch((err) => {
+      console.error("❌ Error while creating the database");
+      console.error(err);
+      reject(err);
+    })
   })
-  app.listen(process.env.PORT, () => {
-    console.log(`✅ Listening on port ${process.env.PORT}`);
-  })
-}).catch( () => {
-  console.error("❌ Error while creating the database")
-})
+}
+
+exports.run();

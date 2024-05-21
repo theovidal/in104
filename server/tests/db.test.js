@@ -1,10 +1,13 @@
 const db = require("../../db");
 const users = require("../controllers/users");
-const tokens = require("../controllers/tokens");
+const courses = require("../controllers/courses");
+const lectures = require("../controllers/lectures");
+const presences = require("../controllers/presences");
 
-test("token db controller", async() => {
+test("course db controller", async() => {
 	try {
-		await db.sync({force: true})
+		await db.sync({force:true})
+
 		const user = await users.create({
 			firstname: "arnaud",
 			lastname: "pelissier",
@@ -12,34 +15,63 @@ test("token db controller", async() => {
 			role: "eleve",
 			password: "1234"
 		});
+	
+		const teacher = await users.create({
+			firstname: "teacher",
+			lastname: "teacher",
+			email: "a@a.a",
+			role: "professeur",
+			password: "abcd"
+		});
+		
+		const course = await courses.create(teacher.id, "MA103 - Groupe 7");
+	
+		const same1 = await courses.getById(course.id);
+		expect(same1.name).toBe(course.name);
+		
+		await courses.addAttendantById(course.id, user.id)
+		
+		expect((await courses.getAttendantsByName("MA103 - Groupe 7"))[0].id).toBe(user.id)
 
-		let expireAt = new Date();
+		expect((await courses.getAttendantsById(course.id))[0].id).toBe(user.id)
 
-		const token = await tokens.create(user.id, expireAt);
+		expect((await courses.getAttendantsById(course.id)).length).toBe(1)
+	
+		await courses.updateById(course.id, {name: "MA103 - Groupe 6"})
+	
+		const same2 = await courses.getByName("MA103 - Groupe 6");
 
-		expireAt.setDate(expireAt.getDate()+1);
+		expect(same2.id).toBe(course.id);
+	
+		await courses.updateByName("MA103 - Groupe 6", {name: "non"});
+	
+		await courses.removeByName("MA103 - Groupe 7");
+		const same3 = await courses.getByName("non");
 
-		const other_token = await tokens.create(user.id, expireAt);
-
-		expect( await tokens.test(other_token.token) ).not.toBe(null);
-		expect( await tokens.test("1234") ).toBe(null);
-
-		await tokens.removeExpiredTokens(user.id)
-
-		expect( await tokens.test(token.token) ).toBe( null );
-
-		const user_data = await tokens.test(other_token.token);
-		expect(user_data.id).toBe(user.id);
-	}
-	catch(err) {
-		console.error(err);
-		expect(true).toBe(false);
+		expect(same3.id).toBe(course.id);
+	
+		await courses.removeById(course.id);
+		
+		const nothing = await courses.getById(course.id);
+	
+		expect(nothing).toBe(null);	
+	} catch(err) {
+		console.error(err)
+		expect(true).toBe(false)
 	}
 })
 
-test("user db controller", async() => {
+test("presences db controller", async() => {
 	try {
-		await db.sync({force: true})
+		await db.sync({force:true})
+
+		const teacher = await users.create({
+			firstname: "teacher",
+			lastname: "teacher",
+			email: "a@a.a",
+			role: "prof",
+			password: "abcd"
+		})
 
 		const user = await users.create({
 			firstname: "arnaud",
@@ -47,22 +79,71 @@ test("user db controller", async() => {
 			email: "a@a.a",
 			role: "eleve",
 			password: "1234"
-		});
+		})
 
-		expect( (await users.getByEmail("a@a.a")).id ).toBe(user.id)
+		const course = await courses.create( teacher.id, "IN104");
 
-		await users.updateById(user.id, {email: "aa@aa.aa"})
+		await courses.addAttendantById(course.id, teacher.id)
+		await courses.addAttendantById(course.id, user.id)
 
-		expect( (await users.getByEmail("aa@aa.aa")).id ).toBe(user.id)
+		const lecture = await lectures.create(new Date(), 120, course.id);
 
-		expect( await users.testCredentialsById(user.id, "1234") ).toBe(true)
-		expect( await users.testCredentialsById(user.id, "12345") ).toBe(false)
+		let presences_res = await lectures.getPresences(lecture.id);
+		presences_res = presences_res.map( el => el.id);
 
-		await users.removeByEmail("aa@aa.aa")
+		for(let id of presences_res) {
+			const predicate = id === teacher.id || id === user.id;
+			expect(predicate).toBe(true);
+		}
 
-		expect( (await users.getByEmail("aa@aa.aa")) ).toBe(null)
-	} catch(err) {
-		console.error(err)
+		const lectureFound = await lectures.getById(lecture.id);
+
+		expect(lecture.id).toBe(lectureFound.id);
+
+		const isPresent = await lectures.isUserPresent(lecture.id, user.id);
+
+		await lectures.updatePresence(lecture.id, user.id, true);
+
+		const andNow = await lectures.isUserPresent(lecture.id, user.id);
+
+		expect(isPresent).toBe(false);
+		expect(andNow).toBe(true);
+
+		const pres1 = await presences.getPresences(
+			undefined,
+			undefined,
+			undefined,
+			true, false
+		);
+
+		const pres2 = await presences.getPresences(
+			undefined,
+			2,
+			undefined,
+			true, false
+		);
+
+		const pres3 = await presences.getPresences(
+			1,
+			undefined,
+			undefined,
+			true, false
+		);
+
+		const pres4 = await presences.getPresences(
+			undefined,
+			undefined,
+			true,
+			true, false
+		);
+
+		expect(pres1.length).toBe(2)
+		expect(pres2.length).toBe(1)
+		expect(pres3.length).toBe(2)
+		expect(pres4.length).toBe(1)
+
+	} catch (error) {
+		console.error(error)
 		expect(true).toBe(false)
 	}
 })

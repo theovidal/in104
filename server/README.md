@@ -1,39 +1,51 @@
-# API server
+# ENSTA Sign - API server
+
+[Documentation](../docs/index.html)
 
 This folder contains the Back-End of our application, which consists of a REST API.
 
-Every API request must contain the user token in the `Authentication` header, except for the login route (obviously).
+The authentication works using JWTs stored in cookies : you just have to create your session and/or refresh it with the routes below, and pass the cookies along your requests (which is handled automatically using popular API software such as Insomnia).
 
 ## Routes
 
-### User management
+### Session
 
-- `POST` login : action of logging in using email and password ; include in the body :
+- `GET` session : get all the information of the user (assuming they're authenticated)
+- `POST` session : action of logging in using email and password ; include in the body :
   - email
   - password
-- `POST` logout : action of logging out (i.e. destroying the token)
-- `GET` profile : get all the information of the user (assuming they're authenticated)
+- `PATCH` session : refresh the session using the refresh token
+- `DELETE` session : action of logging out (i.e. destroying the token)
 
-### Interaction with courses
+### Lectures
 
-- `POST` create-code : action for teachers to create a code for a certain course ; include in the body :
+- `GET` lectures : for a teacher, get all the lectures they are hosting
+
+### Codes
+
+- `POST` code : action for teachers to create a code for a certain lecture ; include in the body :
   - cours : id du cours où l'on veut créer un qr code
-- `POST` scan-code : action for pupils to mark their presence at a certain lecture, given a code
+- `DELETE` code : action for teachers to delete the code, i.e. stopping to take the register ;
 
-### Data fetch for dashboard
+### Presences
 
-- `GET` my-presences : for a pupil, get all the presences (or not)
-- `GET` my-lectures : for a teacher, get all the lectures they are hosting
-- `GET` presence-report : for the administration, get a full report of the presences
+- `GET` presences : get all the presences (or absences) of the user (if pupil) or everyone (if administration) ; include in the body to filter :
+  - userId : ID d'un élève
+  - lectureId : ID d'une lecture
+  - isPresent : Donne les présences si true, absences si false
+- `PATCH` presences : action for pupils to mark their presence at a certain lecture, given a code
+- `DELETE` presences : action for teachers or the administration to manually set a pupil as absent, if the code was scanned even though they weren't in the room ; include in the body :
+  - eleveId : ID de l'élève dont on veut retirer la présence
+  - lectureId : ID de la séance concernée
 
 ## Code structure
 
-- `/core` : snippets to set up and run the app
-- `/routes` : all the routes served by the API
-  - Format : `path`.`method`.js, method = get or post
-  - Every file is automatically imported by the app and integrated as an API route
-- `/middlewares` : functions executed before the main route function to add features (cookies, error handling, logging...)
-- `/tests` : unit tests for API routes
+- `/core` : snippets to set up and run the app ;
+- `/routes` : all the routes served by the API :
+  - Format : `path`.`method`.js, method = get, post, patch or delete ;
+  - Every file is automatically imported by the app and integrated as an API route.
+- `/middlewares` : functions executed before the main route function to add features (cookies, error handling, logging...) ;
+- `/tests` : unit tests for API routes.
 
 ## Snippets
 

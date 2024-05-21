@@ -1,18 +1,23 @@
-const apiUrl = 'http://localhost:8080'
+const apiUrl = `${window.location.origin}/api`
 
 const endpoints = {
-  login: apiUrl + '/login',
-  profile: apiUrl + '/profile',
+  session: apiUrl + '/session',
+  presences: apiUrl + '/presences',
+  lectures: apiUrl + '/lectures',
+  codes: apiUrl + '/codes',
+  courses: apiUrl + '/courses'
 }
 
-async function request(url, method = 'GET', params = undefined) {
-  return await fetch(url, {
-    method: method,
+// request is a utility to make requests using the fetch API
+// so when a body needs to be passed, it's automatically parsed as JSON
+function request(url, method = 'GET', params = undefined) {
+  return fetch(url, {
+    method,
+    credentials: 'same-origin',
     headers: {
       'Content-Type': 'application/json',
-      'Authentication': localStorage.getItem('token')
     },
-    body: JSON.stringify(params)
+    body: JSON.stringify(params),
   })
 }
 

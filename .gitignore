@@ -1,6 +1,7 @@
 .idea
 .vscode
 *.tmp
+.cache
 
 # Production
 build

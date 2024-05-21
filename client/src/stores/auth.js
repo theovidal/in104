@@ -7,41 +7,52 @@ export const useAuthStore = defineStore('auth', () => {
   const authenticated = ref(false)
   const data = ref({})
 
+  // We try to refresh the access token, if it's not possible then the user must re-authenticate
   async function getSession() {
-    const response = await request(endpoints.profile)
-    if (response.ok) {
-      authenticated.value = true
-      data.value = await response.json()
-      return true
-    } else return false
-  }
+    try {
+      // We try to refresh the token
+      const refresh = await request(endpoints.session, 'PATCH');
+      if (!refresh.ok) return false;
 
-  async function login(email, password) {
-    // TODO : éventuellement try/catch pour gestion d'erreur du fetch en lui-même
-    const response = await request(endpoints.login, 'POST', {
-      email,
-      password
-    });
-
-    // Vérification
-    if (response.ok){
-      const json = await response.json();
-      data.value = json.user;
-      authenticated.value = true
-      localStorage.setItem('token', json.token);
-      return true
-    }
-    else{
-      alert("Mauvais identifiant ou mot de passe");
-      //TODO : éventuellement un affichage dynamique sur la page ?
+      // Then to access user data
+      const response = await request(endpoints.session)
+      if (response.ok) {
+        authenticated.value = true
+        data.value = await response.json()
+      }
+      return response.ok
+    } catch {
       return false
     }
   }
 
-  function logout() {
+  // Create a new session by requesting the API
+  // Tokens are automatically stored in the browser as secured cookies
+  async function login(email, password) {
+    const response = await request(endpoints.session, 'POST', {
+      email,
+      password
+    });
+
+    if (response.ok){
+      data.value = await response.json();
+      authenticated.value = true
+      return true
+    }
+    else{
+      alert("Mauvais identifiant ou mot de passe");
+      return false
+    }
+  }
+
+  // Destroy the session
+  // The cookies are automatically deleted from the browser
+  async function logout() {
+    await request(endpoints.session, 'DELETE');
     authenticated.value = false;
-    data.value = {};
-    localStorage.removeItem('token');
+    for (const key in data.value) {
+      delete data.value[key]
+    }
   }
 
   return { authenticated, data, login, logout, getSession }

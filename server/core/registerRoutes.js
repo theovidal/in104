@@ -15,15 +15,10 @@ module.exports = function registerRoutes(app) {
         const path = match[1];
         const method = match[2];
 
-        switch (method) {
-          case 'get':
-            app.get(`/${path}`, module.default);
-            break;
-          case 'post':
-            app.post(`/${path}`, module.default);
-            break;
-          default:
-            throw new Error(`unsupported method for route: ${method}`);
+        try {
+          app[method](`/api/${path}`, module.default)
+        } catch {
+          throw new Error(`unsupported method "${method}" for route: ${path}. Try renaming the file in the "routes" folder.`);
         }
       })
     })

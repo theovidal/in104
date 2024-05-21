@@ -1,13 +1,25 @@
 <div align="center">
     <h1>ENSTA Sign</h1>
-    <h3>A project made for IN104 at <a href="ENSTA Paris">ENSTA Paris</a></h3>
-    Arnaud Pelissier ‒ Seydou Sene ‒ Doris Diallo ‒ Théo Vidal<br>
+    <h3>A project made for IN104 at <a href="https://ensta-paris.fr">ENSTA Paris</a></h3>
+    <a href="https://www.linkedin.com/in/arnaud-pelissier-716693294/">Arnaud Pelissier</a> ‒ <a href="https://www.linkedin.com/in/seydou-sene/">Seydou Sene</a> ‒ <a href="https://www.linkedin.com/in/doris-diallo-542b1228b/">Doris Diallo</a> ‒ <a href="https://www.linkedin.com/in/theovidal/">Théo Vidal</a><br>
     <a href="https://data-ensta.notion.site/IN104-5080e615e0284753b8b3f09e9233b825?pvs=74">Homepage</a>
 </div>
 
 The goal of this project is to develop an app for teachers to take the register using regenerating QR-codes (to prevent students sharing it).
 
+This corresponds to different needs :
+
+- Teachers want to easily and quickly take the register ;
+- Pupils want to see their absences, as they have repercussions on their exam grades ;
+- The administration wants to get all the absences to apply a malus on pupils' grades.
+
 ## Project setup
+
+The project is split between three main parts :
+
+- Database controllers and models ;
+- The client, a Vue.js app served for Client-Side rendering ;
+- A server, serving this client and API routes for it to interact with the database.
 
 First, check that you have all the following dependencies :
 
@@ -21,7 +33,7 @@ git clone https://github.com/theovidal/in104 # with HTTP
 git clone git@github.com:theovidal/in104     # with SSH
 ```
 
-Install all the dependencies :
+Install all the dependencies for the server and the client :
 
 ```bash
 npm install  # with NPM
@@ -32,19 +44,21 @@ cd client
 (do the same command)
 ```
 
-Create a `.env` file at the root of the folder (so at the same level as `index.js`) and populate it with the values given in the [example .env](../.env.example).
+Create a `.env` file at the root of the project and populate it with the values given in the [example .env](.env.example).
 
 ## Run a development server
 
-Run the API server :
+Run the server :
 
 ```bash
-npm run serve  # Using NPM
-yarn serve     # Using Yarn
-pnpm serve     # Using PNPM
+npm run dev  # Using NPM
+yarn dev     # Using Yarn
+pnpm dev     # Using PNPM
 ```
 
 Details of the architecture and API routes can be found in [the server folder](./server/README.md).
+
+The documentation for the API is available in the `docs` folder, you can open the [index.html](./docs/index.html) in your browser, or see the OpenAPI definition in the [YAML file](./docs/api.yaml)
 
 Then, serve the client located in the `/client` directory :
 
@@ -56,6 +70,8 @@ yarn dev
 pnpm dev
 ```
 
+The client can be access using the same port as the server (and should, as the authentication doesn't support cross-origin for security reasons).
+
 ## Run the tests
 
 Tests are made using Jest for the API side. Before all, make sure to run the development server (see section above).
@@ -63,6 +79,12 @@ Tests are made using Jest for the API side. Before all, make sure to run the dev
 Run all the unit and coverage tests :
 
 ```bash
+# In one terminal
+npm run startTest  # Using NPM
+yarn startTest     # Using Yarn
+pnpm startTest     # Using PNPM
+
+# In another terminal
 npm run test  # Using NPM
 yarn test     # Using Yarn
 pnpm test     # Using PNPM
@@ -80,7 +102,17 @@ yarn build
 pnpm build
 ```
 
-And deploy the API on a server that supports Node.js. You'll use the same command as in the development, i.e. `npm run serve`.
+And deploy the API on a server that supports Node.js. Make sure not to move the generated files for the client, as they are served by the server.
+
+You must generate new SSL certificates using the method of your choice (Let's Encrypt is a good choice though) and place them in the `server/ssl` folder.
+
+You can now run the production server :
+
+```bash
+npm run start  # Using NPM
+yarn start     # Using Yarn
+pnpm start     # Using PNPM
+```
 
 ## License
 
