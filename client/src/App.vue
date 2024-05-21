@@ -9,7 +9,7 @@
           v-if="authStore.data.role === 'eleve'"
           to="/scan">Scanner un code</RouterLink>
         <div class="user_show">
-          <img class=icon src="/user_icon.png" height=13px>
+          <img class=icon src="/user_icon.png" alt="user icon" height="13px">
         {{ authStore.data.firstname }} {{ authStore.data.lastname }}
         <RouterLink
           class="nav-item"

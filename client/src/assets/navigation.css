@@ -4,10 +4,7 @@ nav{
     display: flex;
     margin-left: auto;
     margin-right: auto;
-    padding-left: auto;
-    padding-right: auto;
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0 auto;
     position: sticky;
     top: 0;
 

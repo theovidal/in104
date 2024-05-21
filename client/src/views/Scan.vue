@@ -20,15 +20,11 @@ import { QrcodeStream } from 'vue-qrcode-reader'
 import { ref } from 'vue'
 import { isMobile } from "@/utils/device";
 
-// CONSTANTS
-
 // REFS
 const error = ref('')
 const scanned = ref(false)
 
 const facingMode = ref('environment')
-
-// COMPOSABLES
 
 // FUNCTIONS
 
@@ -43,6 +39,8 @@ function switchCamera() {
   }
 }
 
+// This function handles the errors sent by the QR code object
+// The errors from the API are handled in the next function
 function onError(err) {
   error.value = `[${err.name}]: `
 

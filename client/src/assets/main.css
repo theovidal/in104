@@ -38,6 +38,10 @@ button {
   border: 0;
 }
 
+a.disabled {
+  color: grey;
+}
+
 p.error {
   border-radius: 5px;
   background-color: #FF2626;

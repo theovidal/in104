@@ -26,13 +26,14 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  // Create a new session by requesting the API
+  // Tokens are automatically stored in the browser as secured cookies
   async function login(email, password) {
     const response = await request(endpoints.session, 'POST', {
       email,
       password
     });
 
-    // Checking
     if (response.ok){
       data.value = await response.json();
       authenticated.value = true
@@ -44,6 +45,8 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  // Destroy the session
+  // The cookies are automatically deleted from the browser
   async function logout() {
     await request(endpoints.session, 'DELETE');
     authenticated.value = false;

@@ -48,13 +48,10 @@ const courses = await response.json()
 
 function isOver(lecture) {
   const now = new Date();
-  console.log(lecture)
   return new Date(lecture.beginDate) > now || new Date(lecture.endDate) < now
 }
 </script>
 
 <style>
-a.disabled {
-  color: grey;
-}
+
 </style>

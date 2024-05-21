@@ -37,9 +37,9 @@ const email = ref('')
 const password = ref('')
 
 // --------- METHODS -----------
-function onLogin() {
-  if (authStore.login(email.value, password.value)) {
-    router.push(route.query.redirect || '/')
+async function onLogin() {
+  if (await authStore.login(email.value, password.value)) {
+    await router.push(route.query.redirect || '/')
   }
 }
 </script>

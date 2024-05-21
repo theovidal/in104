@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Login from "@/views/Login.vue";
-import Scan from '@/views/Scan.vue';
 import { useAuthStore } from '@/stores/auth.js'
 
 const router = createRouter({
@@ -31,7 +30,10 @@ const router = createRouter({
     {
       path: '/scan',
       name: 'scan',
-      component: Scan
+      component: () => import('../views/Scan.vue'),
+      meta: {
+        roles: ['eleve']
+      }
     }
   ]
 })

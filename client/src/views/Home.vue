@@ -1,4 +1,3 @@
-
 <template>
   <div class="home_wrap">
     <Suspense v-if="authStore.data.role === 'professeur'">
