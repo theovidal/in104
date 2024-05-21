@@ -1,13 +1,25 @@
 <div align="center">
     <h1>ENSTA Sign</h1>
-    <h3>A project made for IN104 at <a href="ENSTA Paris">ENSTA Paris</a></h3>
-    Arnaud Pelissier ‒ Seydou Sene ‒ Doris Diallo ‒ Théo Vidal<br>
+    <h3>A project made for IN104 at <a href="https://ensta-paris.fr">ENSTA Paris</a></h3>
+    <a href="https://www.linkedin.com/in/arnaud-pelissier-716693294/">Arnaud Pelissier</a> ‒ <a href="https://www.linkedin.com/in/seydou-sene/">Seydou Sene</a> ‒ <a href="https://www.linkedin.com/in/doris-diallo-542b1228b/">Doris Diallo</a> ‒ <a href="https://www.linkedin.com/in/theovidal/">Théo Vidal</a><br>
     <a href="https://data-ensta.notion.site/IN104-5080e615e0284753b8b3f09e9233b825?pvs=74">Homepage</a>
 </div>
 
 The goal of this project is to develop an app for teachers to take the register using regenerating QR-codes (to prevent students sharing it).
 
+This corresponds to different needs :
+
+- Teachers want to easily and quickly take the register ;
+- Pupils want to see their absences, as they have repercussions on their exam grades ;
+- The administration wants to get all the absences to apply a malus on pupils' grades.
+
 ## Project setup
+
+The project is split between three main parts :
+
+- Database controllers and models ;
+- The client, a Vue.js app served for Client-Side rendering ;
+- A server, serving this client and API routes for it to interact with the database.
 
 First, check that you have all the following dependencies :
 
@@ -21,7 +33,7 @@ git clone https://github.com/theovidal/in104 # with HTTP
 git clone git@github.com:theovidal/in104     # with SSH
 ```
 
-Install all the dependencies :
+Install all the dependencies for the server and the client :
 
 ```bash
 npm install  # with NPM
@@ -46,6 +58,8 @@ pnpm dev     # Using PNPM
 
 Details of the architecture and API routes can be found in [the server folder](./server/README.md).
 
+The documentation for the API is available in the `docs` folder, you can open the [index.html](./docs/index.html) in your browser, or see the OpenAPI definition in the [YAML file](./docs/api.yaml)
+
 Then, serve the client located in the `/client` directory :
 
 ```bash
@@ -57,8 +71,6 @@ pnpm dev
 ```
 
 The client can be access using the same port as the server (and should, as the authentication doesn't support cross-origin for security reasons).
-
-The documentation for the API is available in the `docs` folder, you can open the [index.html](./docs/index.html) in your browser, or see the OpenAPI definition in the [YAML file](./docs/api.yaml)
 
 ## Run the tests
 

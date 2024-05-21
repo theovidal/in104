@@ -1,4 +1,6 @@
-# API server
+# ENSTA Sign - API server
+
+[Documentation](../docs/index.html)
 
 This folder contains the Back-End of our application, which consists of a REST API.
 
