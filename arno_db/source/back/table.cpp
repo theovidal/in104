@@ -256,7 +256,7 @@ std::string Table::to_json(bool nice_format)
 		}
 	}
 
-	json_str << "}";
+	json_str << "]";
 
 	return json_str.str();
 }

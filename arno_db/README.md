@@ -15,8 +15,17 @@ Statut: _OK_
 ## Deuxième jet
 
 * Ajout de clefs primaires et étrangères
-* Tout binariser
+* Tout "binariser"
+  * Les lignes doivent avoir la même taille => les textes sont stoqués sur un morceau de mémoire différent des lignes
+  * utilisation d'un allocateur mémoire personalisé (plus rapide que malloc car même taille + pas d'interface avec l'OS)
+  * "séréalisation" des données en "petit boutiste" sur un fichier
+* préférer une interface "iterateur" (inspiré de la STL) plutôt que de reconstruire des tables à chaque requête
 
 ## Troisième jet
 
 * Optimisations: préparation des requêtes
+  * Principe: il est possible d'associer à certain champs des tables une relation d'ordre, utiliser une structure arboréscente pour "pré trier" la table et calculer certaines requêtes en O(log(N)) plutôt que O(N)
+
+## Quatrième jet
+
+* Front-end: implémenter une interface SQL au "back"

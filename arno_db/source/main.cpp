@@ -88,6 +88,7 @@ int main()
 	);
 
 	print_condition(cond);
+	std::cout << std::endl;
 
 	std::vector<std::string> names {
 		"arnaud", "louis", "théo", "léonce", "imrane", "maël", "pierre", "paul", "jacques"
@@ -110,7 +111,6 @@ int main()
 	for(const auto &name: names)
 	{
 		adb::Row row_values ({adb::ValInt(current_id++), adb::ValText(name), adb::ValText("ajfeuoize")});
-		//db["users"].insert(row_values);
 		table.insert(row_values);
 	}
 
